@@ -9,6 +9,7 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Mm]emoryCaptures/
+/[Aa]ssets/StreamingAssets/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
@@ -54,6 +55,12 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+build_info.txt
+Assets/StreamingAssets/build_info
+Assets/PlayMaker/Editor/Resources/EditorStartupPrefs.asset
+Assets/StreamingAssets/build_info.meta
+Assets/PlayMaker/Editor/Resources/EditorStartupPrefs.asset.meta
+Assets/Firebase/Plugins/x86_64/FirebaseCppApp-8_8_0.so
 
 # Crashlytics generated file
 crashlytics-build.properties
