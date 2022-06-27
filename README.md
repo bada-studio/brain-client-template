@@ -1,2 +1,7 @@
-# brain-client-template
-Descartes Game Template
+# Descartes Game Template
+
+- 👋 Hi there! We are a mobile application development company using Unity. 🚀
+- 👀 Unity 2020.3.27f1
+- 🌱 We using Spine, Unity Animation, Dotween, Best HTTP, SuperScrollView, UniRX...
+- 💞️ ...
+- 📫 ...
