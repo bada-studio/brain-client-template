@@ -1,4 +1,13 @@
-﻿using UnityEngine;
+﻿/* 
+* Copyright (C) Decartes Corp. All Rights Reserved
+* Unauthorized copying of this file, via any medium is strictly prohibited
+* Proprietary and confidential
+* 
+* @author You sungHyun <1seconds@biscuitlabs.io>
+* @created 2022/06/29
+* @desc SingletonGameObject Template
+*/
+using UnityEngine;
 using System;
 
 public class SingletonGameObject<T> : MonoBehaviour where T : MonoBehaviour {
