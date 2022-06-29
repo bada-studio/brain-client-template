@@ -17,6 +17,7 @@ using DG.Tweening;
 
 namespace g100
 {
+    /*기능설명*/
     public class G100_GameName : MonoBehaviour
     {
         private void Awake()

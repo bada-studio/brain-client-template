@@ -15,3 +15,7 @@
 7. Resources/Prefabs/InGame/G100_GameName 폴더에 작성하신 프리팹을 넣어주세요.
 8. Textures/InGame/G100_GameName 폴더에 사용하시는 Sprite들을 넣어주세요.
 9. 사운드를 출력해야 하는 장소에 todo.sound.filename을 주석으로 남겨주세요.
+10. 불러올 데이터가 있을경우 RuleService를 참고하여 데이터를 넣고 호출해주세요.
+11. 준비가필요한 서비스가 있을때 IntroSceneController를 참고하여 서비스를 준비해주세요.
+12. 공통적으로 사용하는 리소스는 rescourses/Images/Common을 참고해주세요. 없는 리소스는 XD파일에서 추출해주세요.
+13. 스크립트는 가능한 기능별로 쪼개서 작성해주세요. 각 스크립트별로 기능을 작성해서 주석처리에 포함시켜주세요.

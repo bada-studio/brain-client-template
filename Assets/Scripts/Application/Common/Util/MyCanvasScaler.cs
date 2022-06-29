@@ -13,7 +13,6 @@ using UnityEngine;
 public class MyCanvasScaler : MonoBehaviour {
     [SerializeField] private Canvas canvas; 
     [SerializeField] private RectTransform defaultUI;
-    [SerializeField] private RectTransform videoUI;
     [SerializeField] private float width = 720; 
     [SerializeField] private float minHeight = 1280; 
     [SerializeField] private float maxHeight = 1400;
@@ -48,12 +47,6 @@ public class MyCanvasScaler : MonoBehaviour {
         size = new Vector2(width, height);
         defaultUI.anchoredPosition = Vector3.zero;
         defaultUI.sizeDelta = size;
-
-        if (videoUI != null) {
-            videoUI.anchoredPosition = Vector3.zero;
-            videoUI.sizeDelta = size;
-        }
-
         AdjustOffst(size, scaler);
     }
 
