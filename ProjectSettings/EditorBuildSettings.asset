@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Empty.unity
     guid: b5049aa6b869ec1438fbb947209ccdb4
   - enabled: 1
-    path: Assets/Scenes/G100_FourWord.unity
+    path: Assets/Scenes/BCPG9_FourWord.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects: {}
