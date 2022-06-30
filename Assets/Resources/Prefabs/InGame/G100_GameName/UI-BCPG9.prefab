@@ -312,7 +312,7 @@ GameObject:
   - component: {fileID: 5396886828720158691}
   - component: {fileID: 5396886828720158700}
   m_Layer: 5
-  m_Name: Slider - Progress
+  m_Name: Slider-Progress
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -861,7 +861,7 @@ GameObject:
   - component: {fileID: 5396886829071498114}
   - component: {fileID: 5396886829071498113}
   m_Layer: 5
-  m_Name: Text - Score
+  m_Name: Text-Score
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -941,7 +941,7 @@ GameObject:
   - component: {fileID: 5396886829155805614}
   - component: {fileID: 5396886829155805613}
   m_Layer: 5
-  m_Name: Button - Exit
+  m_Name: Button-Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1061,7 +1061,7 @@ GameObject:
   - component: {fileID: 5396886829168616856}
   - component: {fileID: 5396886829168616863}
   m_Layer: 5
-  m_Name: Button - Hint
+  m_Name: Button-Hint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1116,7 +1116,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7058aeedcd79c3a45b2093b2cae59de8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0cde11163860ccd4b8fb11319d273838, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1258,7 +1258,7 @@ GameObject:
   - component: {fileID: 5396886829347868181}
   - component: {fileID: 5396886829347868182}
   m_Layer: 5
-  m_Name: Grid - Quiz Text
+  m_Name: Grid-Quiz Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1331,7 +1331,7 @@ GameObject:
   - component: {fileID: 5396886829351933184}
   - component: {fileID: 5396886829351933191}
   m_Layer: 5
-  m_Name: Text - Timer
+  m_Name: Text-Timer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1580,7 +1580,7 @@ GameObject:
   - component: {fileID: 5396886830000097923}
   - component: {fileID: 5396886830000097922}
   m_Layer: 5
-  m_Name: Text - Description
+  m_Name: Text-Description
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1760,7 +1760,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -47.4, y: 1.4}
+  m_AnchoredPosition: {x: -47.4, y: 2.3}
   m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5396886830121469820
@@ -2044,7 +2044,7 @@ GameObject:
   - component: {fileID: 5396886830303727441}
   - component: {fileID: 5396886830303727440}
   m_Layer: 5
-  m_Name: Button - Help
+  m_Name: Button-Help
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2099,7 +2099,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7058aeedcd79c3a45b2093b2cae59de8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0cde11163860ccd4b8fb11319d273838, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2360,7 +2360,7 @@ GameObject:
   - component: {fileID: 5396886830604539354}
   - component: {fileID: 5396886830604539353}
   m_Layer: 5
-  m_Name: Button - Next Quiz
+  m_Name: Button-Next Quiz
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2414,7 +2414,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7058aeedcd79c3a45b2093b2cae59de8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0cde11163860ccd4b8fb11319d273838, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
