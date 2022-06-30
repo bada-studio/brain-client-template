@@ -19,44 +19,64 @@ using DG.Tweening;
 namespace BCPG9 {
     /*기능설명*/
     public class BCPG9_FourWord : MonoBehaviour, ServiceStatePresenter {
-        [SerializeField] private int maxRoundCount;
-        [SerializeField] private float limitTime;
-        [SerializeField] private int standardScore;
-        [SerializeField] private float comboCheckTime;
-        [SerializeField] private int maxComboCount;
-        [SerializeField] private float comboMultiplier;
-        [SerializeField] private float passMultiplier;
+        [SerializeField] InGameUIController uiController;
         [SerializeField] Timer timer;
+        [SerializeField] ScoreManager scoreManager;
 
         private RuleIndexProvider indexProvider;
-        private ComboCounter comboCounter;
+        private Dictionary<int, BCPG9Rule> rules;
 
         public async void Start() {
             Application.runInBackground = true;
 
-            if (await Boot() == false) {
+            var isInit = await Boot();
+            isInit = isInit && await uiController.Initilize(this, OnAnswer);
+            if (!isInit)
                 return;
-            }
 
             Initialize();
             ResetGame();
-            UpdateUI();
+            SetQuiz();
         }
 
+        #region Pause and Resume
+        public void PauseGame() {
+            uiController.PauseUI();
+            timer.enabled = false;
+        }
+
+        public void ResumeGame() {
+
+        }
+        #endregion
+
+        #region Game Flow
         private void Initialize() {
-            var rules = BCPG9_RuleService.instance.bcpg9Rule;
+            rules = BCPG9_RuleService.instance.bcpg9Rule;
             indexProvider = new RuleIndexProvider(rules.Keys.ToList());
-            comboCounter = new ComboCounter(comboCheckTime, timer);
         }
 
         private void ResetGame() {
             indexProvider.ResetIndex();
-            comboCounter.ResetCounter();
+            timer.ResetTimer();
+            scoreManager.ResetScore();
+            uiController.ResetUI(scoreManager.comboTime);
         }
 
-        private void UpdateUI() {
-            
+        private void SetQuiz() {
+            var picked = rules[indexProvider.GetIndex()];
+            scoreManager.SetAnswer(picked);
+            uiController.UpdateAnswerUI(picked, timer.time);
         }
+
+        private void OnAnswer(string answer) {
+
+        }
+
+        private void GameEnd() {
+
+        }
+        #endregion
 
         #region IntroSceneController.cs Copy
         public void ShowServiceState(string key) {

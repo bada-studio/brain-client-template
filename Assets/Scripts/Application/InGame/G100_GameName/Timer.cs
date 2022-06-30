@@ -1,15 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+namespace BCPG9 {
+    public class Timer : MonoBehaviour {
+        [SerializeField] private float limitedTime;
 
-public class Timer : MonoBehaviour {
-    public float time { get; private set; }
+        public float time { get; private set; }
 
-    public void ResetTimer() {
-        time = 0;
-    }
+        public void ResetTimer() {
+            time = 0;
+        }
 
-    private void Update() {
-        time += Time.deltaTime;
+        private void Update() {
+            time += Time.deltaTime;
+        }
     }
 }
