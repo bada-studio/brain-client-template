@@ -10,7 +10,8 @@
 using System.Threading.Tasks;
 
 public enum ServiceType {
-    Rule
+    Rule,
+    UserData
 }
 
 public interface ServiceStatePresenter {

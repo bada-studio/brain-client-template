@@ -9,7 +9,6 @@
 */
 using UnityEngine;
 
-[ExecuteInEditMode]
 public class MyCanvasScaler : MonoBehaviour {
     [SerializeField] private Canvas canvas; 
     [SerializeField] private RectTransform defaultUI;

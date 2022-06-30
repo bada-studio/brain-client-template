@@ -24,7 +24,7 @@ public class IntroSceneController : SceneControllerBase, ServiceStatePresenter {
         }
         
         //mainScene
-        SwitchScene(SceneType.G100_GameName).RunAsync();
+        SwitchScene(SceneType.G200_GameName).RunAsync();
     }
 
     public void ShowServiceState(string key) {
@@ -33,6 +33,8 @@ public class IntroSceneController : SceneControllerBase, ServiceStatePresenter {
     private async Task<bool> Boot() {
         List<IService> services = new List<IService>();
         services.Add(Service.rule);
+        services.Add(Service.lottoRule);
+        services.Add(Service.userData);
         return await InitializeServices(services);
     }
     

@@ -1,0 +1,24 @@
+{
+   "puzzleMaxCount":10,
+   "waitToStartTime":2.0,
+   "waitToRememberTime":2.0,
+   "correctNumberScore":1000,
+   "mistakeNumberScore":400,
+   "puzzleCountMap":{
+      "Normal":[
+         8000,
+         2000,
+         0
+      ],
+      "Hard":[
+         6000,
+         4000,
+         0
+      ],
+      "VeryHard":[
+         4000,
+         4000,
+         2000
+      ]
+   }
+}

@@ -15,6 +15,8 @@ public class Service : SingletonGameObject<Service> {
     //-------------------------------------------------------------------------
     public static SceneController scene { get; set; }
     public static RuleService rule => RuleService.instance;
+    public static LottoRuleService lottoRule => LottoRuleService.instance;
+    public static UserDataService userData => UserDataService.instance;
     
     private void Awake() {
         DontDestroyOnLoad(gameObject);

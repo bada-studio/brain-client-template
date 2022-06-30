@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 public enum SceneType {
     Intro,
     G100_GameName,
+    G200_GameName,
 }
 
 public interface SceneController {
