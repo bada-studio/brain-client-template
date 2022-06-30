@@ -1,9 +1,45 @@
 namespace BCPG9 {
-    interface IUICallbacks {
-        void OnAnswer(bool isCorrect, int score, float gameTime, int comboCount);
-        void OnResetGame(float comboCheckTime);
-        void OnUpdateAnswer(BCPG9Rule answer, float gameTime);
-        void OnPause();
-        void OnResume();
+    public enum BCPG9GameEventType {
+        Reset,
+        NewQuiz,
+        Input,
+        HintOpen,
+        Pass,
+        Correct,
+        Incorrect,
+        Pause,
+        Resume
+    }
+
+    [System.Serializable]
+    public class BCPG9GameData {
+        public float limitedTime;
+        public int standardScore;
+        public float comboCheckTime;
+        public int maxComboCount;
+        public float comboMultiplier;
+        public float passMultiplier;
+    }
+
+    public class BCPG9PlayData {
+        public BCPG9Rule rule;
+        public int score;
+        public int comboCount;
+        public int limitedTime;
+        public float remainComboTime;
+        public float remainComboRatio;
+    }
+
+    interface IUIEventCallback {
+        public void OnEventCall(BCPG9GameEventType eventType, BCPG9GameData gameData, BCPG9PlayData playData);
+    }
+
+    interface IUIUpdateCallback {
+        public void OnUpdateCall(BCPG9PlayData playData);
+    }
+
+    interface IGameModule {
+        public void Initialize(BCPG9GameData gameData, BCPG9_FourWord gameManager);
+        public void ResetModule();
     }
 }

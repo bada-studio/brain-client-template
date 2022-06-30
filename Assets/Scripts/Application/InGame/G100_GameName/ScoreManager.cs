@@ -3,21 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace BCPG9 {
-    public class ScoreManager : MonoBehaviour {
+    public class ScoreManager : MonoBehaviour, IGameModule {
         [SerializeField] private Timer timer;
-        [SerializeField] private int standardScore;
-        [SerializeField] private float comboCheckTime;
-        [SerializeField] private int maxComboCount;
-        [SerializeField] private float comboMultiplier;
-        [SerializeField] private float passMultiplier;
 
-        public float comboTime => comboCheckTime;
         public int comboCount { get; private set; }
-        private float lastCheckTime;
-        private int currentScore;
-        private string currentAnswer;
+        public int currentScore { get; private set; }
+        public string currentAnswer { get; private set; }
+        public float remainComboTime => comboCheckTime - (timer.time - lastCheckTime);
 
-        public void ResetScore() {
+        private float lastCheckTime;
+        private int standardScore;
+        private float comboCheckTime;
+        private int maxComboCount;
+        private float comboMultiplier;
+        private float passMultiplier;
+
+        public void Initialize(BCPG9GameData gameData, BCPG9_FourWord gameManager) {
+            this.standardScore = gameData.standardScore;
+            this.comboCheckTime = gameData.comboCheckTime;
+            this.maxComboCount = gameData.maxComboCount;
+            this.comboMultiplier = gameData.comboMultiplier;
+            this.passMultiplier = gameData.passMultiplier;
+        }
+
+        public void ResetModule() {
             lastCheckTime = timer.time;
             comboCount = 0;
             currentScore = 0;
@@ -27,11 +36,16 @@ namespace BCPG9 {
             currentAnswer = rule.word.Substring(2, 2);
         }
 
+        public bool CheckNotEnd(string answer) {
+            return currentAnswer[0] == answer[0];
+        }
+
         public bool CheckAnswer(string answer) {
             bool isCorrect = currentAnswer.CompareTo(answer) == 0;
-            CheckCombo(isCorrect);
-            if (isCorrect)
+            if (isCorrect) {
+                CheckCombo();
                 AddScore();
+            }
             return isCorrect;
         }
 
@@ -39,12 +53,9 @@ namespace BCPG9 {
             currentScore = Mathf.FloorToInt(currentScore * passMultiplier);
         }
 
-        private void Start() {
-            ResetScore();
-        }
-
-        private void CheckCombo(bool isCorrect) {
-            var isCombo = (timer.time - lastCheckTime < comboCheckTime || comboCount <= 0) && isCorrect;
+        public void CheckCombo() {
+            var isCombo = remainComboTime > 0;
+            Debug.Log($"remain combo time {remainComboTime}");
             if (isCombo)
                 comboCount++;
             else
@@ -53,8 +64,10 @@ namespace BCPG9 {
         }
 
         private void AddScore() {
-            var multiplier = Mathf.Pow(comboMultiplier, comboCount);
+            var multiplier = Mathf.Pow(comboMultiplier, comboCount - 1);
+            multiplier = multiplier < 1 ? 1 : multiplier;
             currentScore += Mathf.FloorToInt(standardScore * multiplier);
+            Debug.Log($"{multiplier} {currentScore}");
         }
     }
 }

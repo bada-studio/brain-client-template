@@ -7,36 +7,56 @@ using System.Threading.Tasks;
 using UnityEngine.UI;
 
 namespace BCPG9 {
-    public class InGameUIController : MonoBehaviour {
+    public class InGameUIController : MonoBehaviour, IGameModule {
         [SerializeField] InputField answerInputField;
+        [SerializeField] ResultPopup resultPopup;
+        [SerializeField] BottomPanel bottomPanel;
+        [SerializeField] GameObject screenLock;
 
-        private List<IUICallbacks> callbacks;
-        private BCPG9_FourWord gameManager;
+        private List<IUIEventCallback> eventCallbacks;
+        private List<IUIUpdateCallback> updateCallbacks;
         private Action<string> answerAction;
 
-        public async Task<bool> Initilize(BCPG9_FourWord gameManager, Action<string> answerAction) {
-            callbacks = GetComponentsInChildren<IUICallbacks>().ToList();
-            this.answerAction = answerAction;
+        public void Initialize(BCPG9GameData gameData, BCPG9_FourWord gameManager) {
+            eventCallbacks = GetComponentsInChildren<IUIEventCallback>().ToList();
+            updateCallbacks = GetComponentsInChildren<IUIUpdateCallback>().ToList();
             answerInputField.onValueChanged.AddListener(OnInputValueChange);
-            return true;
+            answerAction = gameManager.OnAnswer;
         }
 
-        /*  todo
-            키보드 상에서 한글 입력 시 버퍼로 인해 제대로 입력 안됨
-            모바일 상에서는 정상입력
-        */
+        public void ResetModule() {
+        }
+
         public void OnInputValueChange(string value) {
             answerAction?.Invoke(value);
         }
 
-        public void PauseUI() => callbacks.ForEach(_ => _.OnPause());
-        public void ResumeUI() => callbacks.ForEach(_ => _.OnResume());
-        public void ResetUI(float comboCheckTime)
-            => callbacks.ForEach(_ => _.OnResetGame(comboCheckTime));
-        public void UpdateAnswerUI(BCPG9Rule answer, float gameTime)
-            => callbacks.ForEach(_ => _.OnUpdateAnswer(answer, gameTime));
-        public void ResultAnswerUI(bool isCorrect, int score, float gameTime, int comboCount)
-            => callbacks.ForEach(_ => _.OnAnswer(isCorrect, score, gameTime, comboCount));
+        public void CallEvent(BCPG9GameEventType eventType, BCPG9GameData gameData, BCPG9PlayData playData) {
+            eventCallbacks.ForEach(_ => _.OnEventCall(eventType, gameData, playData));
+        }
 
+        public void CallUpdate(BCPG9PlayData playData) {
+            updateCallbacks.ForEach(_ => _.OnUpdateCall(playData));
+        }
+
+        public void ShowResult(bool isCorrect) {
+            if (isCorrect)
+                resultPopup.OnCorrect();
+            else
+                resultPopup.OnWrong();
+        }
+
+        public void ShowBottomPanel() {
+            bottomPanel.Show();
+        }
+
+        public void LockInteraction(bool isLock) {
+            screenLock.SetActive(isLock);
+            answerInputField.interactable = !isLock;
+            if (!isLock) {
+                answerInputField.ActivateInputField();
+                answerInputField.text = "";
+            }
+        }
     }
 }

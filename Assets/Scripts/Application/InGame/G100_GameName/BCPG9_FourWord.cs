@@ -13,68 +13,137 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using CnControls;
 using DG.Tweening;
 
 namespace BCPG9 {
     /*기능설명*/
     public class BCPG9_FourWord : MonoBehaviour, ServiceStatePresenter {
+        public static void CallGlobalEvent(BCPG9GameEventType eType) => globalEventCall?.Invoke(eType);
+        private static UnityEvent<BCPG9GameEventType> globalEventCall;
+
+        [SerializeField] BCPG9GameData gameData;
         [SerializeField] InGameUIController uiController;
         [SerializeField] Timer timer;
         [SerializeField] ScoreManager scoreManager;
 
+        private List<IGameModule> modules;
         private RuleIndexProvider indexProvider;
         private Dictionary<int, BCPG9Rule> rules;
+        private BCPG9PlayData playData;
+        private bool isPaused = false;
 
         public async void Start() {
-            Application.runInBackground = true;
-
             var isInit = await Boot();
-            isInit = isInit && await uiController.Initilize(this, OnAnswer);
             if (!isInit)
                 return;
-
             Initialize();
             ResetGame();
-            SetQuiz();
+        }
+
+        private void Update() {
+            if (!isPaused) {
+                timer.UpdateTimer();
+                UpdatePlayData();
+                uiController.CallUpdate(playData);
+                if (timer.isTimeExpired)
+                    GameEnd();
+            }
+        }
+
+        private void UpdatePlayData() {
+            playData.comboCount = scoreManager.comboCount;
+            playData.score = scoreManager.currentScore;
+            playData.limitedTime = timer.limitedTimeInt;
+            playData.remainComboTime = scoreManager.remainComboTime;
+            playData.remainComboRatio = playData.remainComboTime / gameData.comboCheckTime;
+        }
+
+        private void CallGameEvent(BCPG9GameEventType eventType) {
+            UpdatePlayData();
+            uiController.CallEvent(eventType, gameData, playData);
         }
 
         #region Pause and Resume
         public void PauseGame() {
-            uiController.PauseUI();
-            timer.enabled = false;
+            uiController.LockInteraction(true);
+            CallGameEvent(BCPG9GameEventType.Pause);
+            isPaused = true;
         }
 
         public void ResumeGame() {
-
+            CallGameEvent(BCPG9GameEventType.Resume);
+            isPaused = false;
+            uiController.LockInteraction(false);
         }
         #endregion
 
-        #region Game Flow
+        /*
+            Initilaize -> Reset -> SetQuiz -> OnAnswer
+                                     ┕-----------┙
+        */
+        #region Game Loop 
         private void Initialize() {
+            globalEventCall = new UnityEvent<BCPG9GameEventType>();
+            globalEventCall.AddListener(CallGameEvent);
+
             rules = BCPG9_RuleService.instance.bcpg9Rule;
             indexProvider = new RuleIndexProvider(rules.Keys.ToList());
+            playData = new BCPG9PlayData();
+
+            modules = new List<IGameModule>();
+            modules.Add(scoreManager);
+            modules.Add(timer);
+            modules.Add(uiController);
+            modules.ForEach(_ => _.Initialize(gameData, this));
         }
 
-        private void ResetGame() {
+        public void ResetGame() {
             indexProvider.ResetIndex();
-            timer.ResetTimer();
-            scoreManager.ResetScore();
-            uiController.ResetUI(scoreManager.comboTime);
+            modules.ForEach(_ => _.ResetModule());
+            UpdatePlayData();
+            CallGameEvent(BCPG9GameEventType.Reset);
+            isPaused = false;
+            uiController.LockInteraction(false);
+            SetQuiz();
         }
 
         private void SetQuiz() {
-            var picked = rules[indexProvider.GetIndex()];
-            scoreManager.SetAnswer(picked);
-            uiController.UpdateAnswerUI(picked, timer.time);
+            playData.rule = rules[indexProvider.GetIndex()];
+            scoreManager.SetAnswer(playData.rule);
+            CallGameEvent(BCPG9GameEventType.NewQuiz);
         }
 
-        private void OnAnswer(string answer) {
+        public void OnAnswer(string answer) {
+            if (answer.Length >= 2) {
+                var isNotEnd = scoreManager.CheckNotEnd(answer);
+                var isCorrect = scoreManager.CheckAnswer(answer);
+                if (isNotEnd && !isCorrect)
+                    return;
+                StartCoroutine(AnswerWaitRoutine(isCorrect));
+            }
+        }
 
+        IEnumerator AnswerWaitRoutine(bool isCorrect) {
+            if (isCorrect)
+                CallGameEvent(BCPG9GameEventType.Correct);
+            else
+                CallGameEvent(BCPG9GameEventType.Incorrect);
+
+            var animWait = new WaitForSeconds(1.333f);
+            PauseGame();
+            uiController.ShowResult(isCorrect);
+            yield return animWait;
+            SetQuiz();
+            ResumeGame();
+
+            yield return null;
         }
 
         private void GameEnd() {
-
+            PauseGame();
+            uiController.ShowBottomPanel();
         }
         #endregion
 
