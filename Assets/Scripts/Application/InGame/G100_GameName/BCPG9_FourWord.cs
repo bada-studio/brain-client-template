@@ -142,7 +142,9 @@ namespace BCPG9 {
             PauseGame();
             uiController.ShowResult(isCorrect);
             yield return animWait;
-            SetQuiz();
+
+            if (isCorrect)
+                SetQuiz();
             ResumeGame();
 
             yield return null;
