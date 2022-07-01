@@ -61,6 +61,13 @@ namespace BCPG9 {
         }
 
         private void CallGameEvent(BCPG9GameEventType eventType) {
+            switch (eventType) {
+                case BCPG9GameEventType.Pass:
+                    scoreManager.PassAnswer();
+                    SetQuiz();
+                    break;
+            }
+
             UpdatePlayData();
             uiController.CallEvent(eventType, gameData, playData);
         }

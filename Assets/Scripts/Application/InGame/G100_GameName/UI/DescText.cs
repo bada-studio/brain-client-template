@@ -14,6 +14,7 @@ namespace BCPG9 {
                     descText.text = playData.rule.desc;
                     break;
                 case BCPG9GameEventType.HintOpen:
+                case BCPG9GameEventType.Correct:
                     descText.gameObject.SetActive(true);
                     break;
             }

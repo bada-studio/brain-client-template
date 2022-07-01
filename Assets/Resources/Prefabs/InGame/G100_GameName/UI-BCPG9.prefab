@@ -998,7 +998,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.8352942, b: 0.18039216, a: 1}
+  m_Color: {r: 0.9490197, g: 0.95294124, b: 0.9607844, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1027,6 +1027,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50e9f841d65fbb24ea29c6812c2ba33f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  normalColor: {r: 0.9490196, g: 0.9529412, b: 0.9607843, a: 1}
+  answerColor: {r: 1, g: 0.8352942, b: 0.18039216, a: 1}
   answerText: {fileID: 5396886830428648300}
   bgImage: {fileID: 5396886828780721867}
 --- !u!1 &5396886828930031684
@@ -1089,7 +1091,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.8352942, b: 0.18039216, a: 1}
+  m_Color: {r: 0.9490197, g: 0.95294124, b: 0.9607844, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1118,6 +1120,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50e9f841d65fbb24ea29c6812c2ba33f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  normalColor: {r: 0.9490196, g: 0.9529412, b: 0.9607843, a: 1}
+  answerColor: {r: 1, g: 0.8352942, b: 0.18039216, a: 1}
   answerText: {fileID: 5396886829007016259}
   bgImage: {fileID: 5396886828930031686}
 --- !u!1 &5396886828969367472
@@ -1413,7 +1417,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.8352942, b: 0.18039216, a: 1}
+  m_Color: {r: 0.9490197, g: 0.95294124, b: 0.9607844, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1442,6 +1446,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50e9f841d65fbb24ea29c6812c2ba33f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  normalColor: {r: 0.9490196, g: 0.9529412, b: 0.9607843, a: 1}
+  answerColor: {r: 1, g: 0.8352942, b: 0.18039216, a: 1}
   answerText: {fileID: 5396886829942095263}
   bgImage: {fileID: 5396886829202201892}
 --- !u!1 &5396886829347868170
@@ -1887,7 +1893,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.8352942, b: 0.18039216, a: 1}
+  m_Color: {r: 0.9490197, g: 0.95294124, b: 0.9607844, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1916,6 +1922,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50e9f841d65fbb24ea29c6812c2ba33f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  normalColor: {r: 0.9490196, g: 0.9529412, b: 0.9607843, a: 1}
+  answerColor: {r: 1, g: 0.8352942, b: 0.18039216, a: 1}
   answerText: {fileID: 5396886830111129258}
   bgImage: {fileID: 5396886830267904562}
 --- !u!1 &5396886830370308712
