@@ -25,9 +25,8 @@ namespace BCPG9 {
         public BCPG9Rule rule;
         public int score;
         public int comboCount;
-        public int limitedTime;
-        public float remainComboTime;
-        public float remainComboRatio;
+        public float remainTime;
+        public float remainTimeRatio;
     }
 
     interface IUIEventCallback {

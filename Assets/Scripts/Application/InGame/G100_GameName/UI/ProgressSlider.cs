@@ -8,7 +8,7 @@ namespace BCPG9 {
         [SerializeField] Slider progressSlider;
 
         public void OnUpdateCall(BCPG9PlayData playData) {
-            var ratio = playData.remainComboRatio > 0 ? playData.remainComboRatio : 0;
+            var ratio = playData.remainTimeRatio > 0 ? playData.remainTimeRatio : 0;
             progressSlider.value = ratio;
         }
     }

@@ -9,8 +9,8 @@ namespace BCPG9 {
         private int lastRemainTime;
 
         public void OnUpdateCall(BCPG9PlayData playData) {
-            if (lastRemainTime != playData.limitedTime) {
-                lastRemainTime = playData.limitedTime;
+            if (lastRemainTime != playData.remainTime) {
+                lastRemainTime = Mathf.CeilToInt(playData.remainTime);
                 timeText.text = $"{lastRemainTime.ToString()}초";
             }
         }

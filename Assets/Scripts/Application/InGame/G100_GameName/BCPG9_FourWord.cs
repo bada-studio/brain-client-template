@@ -55,9 +55,8 @@ namespace BCPG9 {
         private void UpdatePlayData() {
             playData.comboCount = scoreManager.comboCount;
             playData.score = scoreManager.currentScore;
-            playData.limitedTime = timer.limitedTimeInt;
-            playData.remainComboTime = scoreManager.remainComboTime;
-            playData.remainComboRatio = playData.remainComboTime / gameData.comboCheckTime;
+            playData.remainTime = timer.remainTimeInt;
+            playData.remainTimeRatio = timer.remainTime / gameData.limitedTime;
         }
 
         private void CallGameEvent(BCPG9GameEventType eventType) {
