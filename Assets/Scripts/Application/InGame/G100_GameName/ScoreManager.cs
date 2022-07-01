@@ -53,6 +53,10 @@ namespace BCPG9 {
             currentScore = Mathf.FloorToInt(currentScore * passMultiplier);
         }
 
+        public void ClearCombo() {
+            comboCount = 0;
+        }
+
         public void CheckCombo() {
             var isCombo = remainComboTime > 0;
             Debug.Log($"remain combo time {remainComboTime}");

@@ -62,6 +62,9 @@ namespace BCPG9 {
 
         private void CallGameEvent(BCPG9GameEventType eventType) {
             switch (eventType) {
+                case BCPG9GameEventType.HintOpen:
+                    scoreManager.ClearCombo();
+                    break;
                 case BCPG9GameEventType.Pass:
                     scoreManager.PassAnswer();
                     SetQuiz();
