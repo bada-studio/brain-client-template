@@ -12,6 +12,7 @@ namespace BCPG9 {
         [SerializeField] ResultPopup resultPopup;
         [SerializeField] BottomPanel bottomPanel;
         [SerializeField] GameObject screenLock;
+        [SerializeField] ComboCounter comboCounter;
 
         private List<IUIEventCallback> eventCallbacks;
         private List<IUIUpdateCallback> updateCallbacks;
@@ -39,11 +40,13 @@ namespace BCPG9 {
             updateCallbacks.ForEach(_ => _.OnUpdateCall(playData));
         }
 
-        public void ShowResult(bool isCorrect) {
-            if (isCorrect)
+        public void ShowResult(bool isCorrect, int comboCount) {
+            if (isCorrect) {
                 resultPopup.OnCorrect();
-            else
+                comboCounter.ShowCombo(comboCount);
+            } else {
                 resultPopup.OnWrong();
+            }
         }
 
         public void ShowBottomPanel() {

@@ -140,7 +140,7 @@ namespace BCPG9 {
 
             var animWait = new WaitForSeconds(1.333f);
             PauseGame();
-            uiController.ShowResult(isCorrect);
+            uiController.ShowResult(isCorrect, scoreManager.comboCount);
             yield return animWait;
 
             if (isCorrect)
