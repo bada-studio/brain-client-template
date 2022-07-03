@@ -6,17 +6,19 @@ namespace BCPG9 {
     public class ScoreManager : MonoBehaviour, IGameModule {
         [SerializeField] private Timer timer;
 
-        public int comboCount { get; private set; }
-        public int currentScore { get; private set; }
-        public Dictionary<string, string> currentAnswer { get; private set; }
-        public float remainComboTime => comboCheckTime - (timer.time - lastCheckTime);
-
+        #region Global Settings Clone
         private float lastCheckTime;
         private int standardScore;
         private float comboCheckTime;
         private int maxComboCount;
         private float comboMultiplier;
         private float passMultiplier;
+        #endregion
+
+        public int comboCount { get; private set; }
+        public int currentScore { get; private set; }
+        public Dictionary<string, string> currentAnswer { get; private set; }
+        public float remainComboTime => comboCheckTime - (timer.time - lastCheckTime);
 
         public void Initialize(BCPG9GameSettings gameData, BCPG9_FourWord gameManager) {
             this.standardScore = gameData.standardScore;

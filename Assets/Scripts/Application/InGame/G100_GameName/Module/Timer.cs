@@ -4,8 +4,11 @@ using UnityEngine;
 namespace BCPG9 {
     public class Timer : MonoBehaviour, IGameModule {
         public float time { get; private set; }
-
+        
+        #region Global Settings Clone
         private float limitedTime;
+        #endregion
+
         public int remainTimeInt => Mathf.CeilToInt(limitedTime - time);
         public float remainTime => limitedTime - time;
         public bool isTimeExpired => remainTime <= 0;

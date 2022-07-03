@@ -8,15 +8,23 @@ namespace BCPG9 {
         [SerializeField] private Text timeText;
         [SerializeField] private Color normalColor;
         [SerializeField] private Color alertTextColor;
+        [SerializeField] private Animation textAnim;
         private int lastRemainTime;
 
         public void OnEventCall(BCPG9GameEventType eventType, BCPG9GameSettings gameData, BCPG9PlayData playData, string input = null) {
             switch (eventType) {
                 case BCPG9GameEventType.Reset:
                     timeText.color = normalColor;
+                    textAnim.Rewind();
+                    textAnim.Stop();
                     break;
                 case BCPG9GameEventType.CloseEnd:
                     timeText.color = alertTextColor;
+                    textAnim.Play();
+                    break;
+                case BCPG9GameEventType.End:
+                    textAnim.Rewind();
+                    textAnim.Stop();
                     break;
             }
         }
