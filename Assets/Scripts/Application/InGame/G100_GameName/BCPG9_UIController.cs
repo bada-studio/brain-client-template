@@ -7,19 +7,18 @@ using System.Threading.Tasks;
 using UnityEngine.UI;
 
 namespace BCPG9 {
-    public class InGameUIController : MonoBehaviour, IGameModule {
+    public class BCPG9_UIController : MonoBehaviour, IGameModule {
         [SerializeField] InputField answerInputField;
-        [SerializeField] ResultPopup resultPopup;
-        [SerializeField] BottomPanel bottomPanel;
         [SerializeField] GameObject screenLock;
-        [SerializeField] ComboCounter comboCounter;
 
         private List<IUIEventCallback> eventCallbacks;
         private List<IUIUpdateCallback> updateCallbacks;
+        private List<InputField> inputFields;
 
         public void Initialize(BCPG9GameData gameData, BCPG9_FourWord gameManager) {
             eventCallbacks = GetComponentsInChildren<IUIEventCallback>().ToList();
             updateCallbacks = GetComponentsInChildren<IUIUpdateCallback>().ToList();
+            inputFields = GetComponentsInChildren<InputField>().ToList();
             answerInputField.onValueChanged.AddListener(OnInputValueChange);
         }
 
@@ -32,19 +31,6 @@ namespace BCPG9 {
 
         public void CallUpdate(BCPG9PlayData playData) {
             updateCallbacks.ForEach(_ => _.OnUpdateCall(playData));
-        }
-
-        public void ShowResult(bool isCorrect, int comboCount) {
-            if (isCorrect) {
-                resultPopup.OnCorrect();
-                comboCounter.ShowCombo(comboCount);
-            } else {
-                resultPopup.OnWrong();
-            }
-        }
-
-        public void ShowBottomPanel() {
-            bottomPanel.Show();
         }
 
         public void LockInteraction(bool isLock) {

@@ -26,7 +26,8 @@ namespace BCPG9 {
         private static UnityEvent<InputField> inputEventCall;
 
         [SerializeField] BCPG9GameData gameData;
-        [SerializeField] InGameUIController uiController;
+        [SerializeField] BCPG9_UIController uiController;
+        [SerializeField] PopupController popupController;
         [SerializeField] Timer timer;
         [SerializeField] ScoreManager scoreManager;
 
@@ -143,21 +144,12 @@ namespace BCPG9 {
             CallGameEvent(BCPG9GameEventType.Input);
             if (currentInput.Length >= 2) {
                 var isCorrect = scoreManager.CheckAnswer(currentInput);
-                if (!CheckInputEnd(currentInput) && !isCorrect) {
-                    Debug.Log(CheckInputEnd(currentInput));
+                if (!field.CheckKoreanInputEnd() && !isCorrect) {
+                    Debug.Log(field.CheckKoreanInputEnd());
                     return;
                 }
                 StartCoroutine(AnswerWaitRoutine(isCorrect));
             }
-        }
-
-        private static bool CheckInputEnd(string input) {
-            var lastCode = (int)input.Last();
-            bool isNotComplete = (lastCode - 0xAC00) % 28 == 0;
-            bool isNotSingle = lastCode >= 0xAC00 && lastCode <= 0xD7A3;
-            if (isNotComplete || !isNotSingle)
-                return false;
-            return true;
         }
 
         IEnumerator AnswerWaitRoutine(bool isCorrect) {
@@ -168,7 +160,7 @@ namespace BCPG9 {
 
             var animWait = new WaitForSeconds(1.333f);
             PauseGame();
-            uiController.ShowResult(isCorrect, scoreManager.comboCount);
+            popupController.ShowResult(isCorrect, scoreManager.comboCount);
             yield return animWait;
 
             if (isCorrect)
@@ -180,7 +172,7 @@ namespace BCPG9 {
 
         private void GameEnd() {
             PauseGame();
-            uiController.ShowBottomPanel();
+            popupController.ShowBottomPanel();
             CallGameEvent(BCPG9GameEventType.End);
         }
         #endregion
