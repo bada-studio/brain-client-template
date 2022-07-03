@@ -15,7 +15,7 @@ namespace BCPG9 {
         private List<IUIUpdateCallback> updateCallbacks;
         private List<InputField> inputFields;
 
-        public void Initialize(BCPG9GameData gameData, BCPG9_FourWord gameManager) {
+        public void Initialize(BCPG9GameSettings gameData, BCPG9_FourWord gameManager) {
             eventCallbacks = GetComponentsInChildren<IUIEventCallback>().ToList();
             updateCallbacks = GetComponentsInChildren<IUIUpdateCallback>().ToList();
             inputFields = GetComponentsInChildren<InputField>().ToList();
@@ -25,7 +25,7 @@ namespace BCPG9 {
         public void ResetModule() {
         }
 
-        public void CallEvent(BCPG9GameEventType eventType, BCPG9GameData gameData, BCPG9PlayData playData, string input = null) {
+        public void CallEvent(BCPG9GameEventType eventType, BCPG9GameSettings gameData, BCPG9PlayData playData, string input = null) {
             eventCallbacks.ForEach(_ => _.OnEventCall(eventType, gameData, playData, input));
         }
 

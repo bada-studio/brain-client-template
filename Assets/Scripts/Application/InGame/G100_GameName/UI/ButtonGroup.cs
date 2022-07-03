@@ -32,7 +32,7 @@ namespace BCPG9 {
             BCPG9_FourWord.CallGlobalEvent(BCPG9GameEventType.HintOpen);
         }
 
-        public void OnEventCall(BCPG9GameEventType eventType, BCPG9GameData gameData, BCPG9PlayData playData, string input = null) {
+        public void OnEventCall(BCPG9GameEventType eventType, BCPG9GameSettings gameData, BCPG9PlayData playData, string input = null) {
             switch (eventType) {
                 case BCPG9GameEventType.NewQuiz:
                     OnNewQuiz();

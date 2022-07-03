@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RuleIndexProvider {
+public class RandomIndexProvider {
     private int pivot = 0;
     private List<int> indexList;
 
-    public RuleIndexProvider(List<int> indexList) {
+    public RandomIndexProvider(List<int> indexList) {
         this.indexList = indexList;
         ResetIndex();
     }

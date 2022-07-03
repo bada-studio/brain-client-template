@@ -7,7 +7,7 @@ namespace BCPG9 {
     public class ScoreText : MonoBehaviour, IUIEventCallback {
         [SerializeField] private Text scoreText;
 
-        public void OnEventCall(BCPG9GameEventType eventType, BCPG9GameData gameData, BCPG9PlayData playData, string input = null) {
+        public void OnEventCall(BCPG9GameEventType eventType, BCPG9GameSettings gameData, BCPG9PlayData playData, string input = null) {
             switch (eventType) {
                 case BCPG9GameEventType.Reset:
                     scoreText.text = "0";

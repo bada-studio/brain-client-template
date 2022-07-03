@@ -10,7 +10,7 @@ namespace BCPG9 {
         [SerializeField] private Color normalColor;
         [SerializeField] private Color alertColor;
 
-        public void OnEventCall(BCPG9GameEventType eventType, BCPG9GameData gameData, BCPG9PlayData playData, string input = null) {
+        public void OnEventCall(BCPG9GameEventType eventType, BCPG9GameSettings gameData, BCPG9PlayData playData, string input = null) {
             switch (eventType) {
                 case BCPG9GameEventType.CloseEnd:
                     fillImage.color = alertColor;

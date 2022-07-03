@@ -14,7 +14,7 @@ namespace BCPG9 {
             time += Time.deltaTime;
         }
 
-        public void Initialize(BCPG9GameData gameData, BCPG9_FourWord gameManager) {
+        public void Initialize(BCPG9GameSettings gameData, BCPG9_FourWord gameManager) {
             limitedTime = gameData.limitedTime;
         }
 

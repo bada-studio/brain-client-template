@@ -11,7 +11,7 @@ namespace BCPG9 {
         [SerializeField] private Color normalTextColor;
         [SerializeField] private Color incorrectTextColor;
 
-        public void OnEventCall(BCPG9GameEventType eventType, BCPG9GameData gameData, BCPG9PlayData playData, string input = null) {
+        public void OnEventCall(BCPG9GameEventType eventType, BCPG9GameSettings gameData, BCPG9PlayData playData, string input = null) {
             switch (eventType) {
                 case BCPG9GameEventType.NewQuiz:
                     UpdateAnswer(playData.rule);

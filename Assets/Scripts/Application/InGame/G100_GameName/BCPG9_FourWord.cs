@@ -25,14 +25,14 @@ namespace BCPG9 {
         private static UnityEvent<BCPG9GameEventType> globalEventCall;
         private static UnityEvent<InputField> inputEventCall;
 
-        [SerializeField] BCPG9GameData gameData;
+        [SerializeField] BCPG9GameSettings gameData;
         [SerializeField] BCPG9_UIController uiController;
         [SerializeField] PopupController popupController;
         [SerializeField] Timer timer;
         [SerializeField] ScoreManager scoreManager;
 
         private List<IGameModule> modules;
-        private RuleIndexProvider indexProvider;
+        private RandomIndexProvider indexProvider;
         private Dictionary<int, BCPG9Rule> rules;
         private BCPG9PlayData playData;
         private bool isPaused = false;
@@ -111,7 +111,7 @@ namespace BCPG9 {
             inputEventCall.AddListener(OnInputAnswer);
 
             rules = BCPG9_RuleService.instance.bcpg9Rule;
-            indexProvider = new RuleIndexProvider(rules.Keys.ToList());
+            indexProvider = new RandomIndexProvider(rules.Keys.ToList());
             playData = new BCPG9PlayData();
 
             modules = new List<IGameModule>();

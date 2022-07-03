@@ -18,7 +18,7 @@ namespace BCPG9 {
         private float comboMultiplier;
         private float passMultiplier;
 
-        public void Initialize(BCPG9GameData gameData, BCPG9_FourWord gameManager) {
+        public void Initialize(BCPG9GameSettings gameData, BCPG9_FourWord gameManager) {
             this.standardScore = gameData.standardScore;
             this.comboCheckTime = gameData.comboCheckTime;
             this.maxComboCount = gameData.maxComboCount;
