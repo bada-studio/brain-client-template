@@ -15,7 +15,7 @@ namespace BCPG9 {
         private WaitForSeconds animWait = new WaitForSeconds(1.333f);
 
         private void Awake() {
-            LoadSprites();
+            spriteSet = LoadSprites(comboNumbers);
             holder.SetActive(false);
         }
 
@@ -47,14 +47,15 @@ namespace BCPG9 {
             oneImage.sprite = spriteSet[one];
         }
 
-        private void LoadSprites() {
-            spriteSet = new Dictionary<int, Sprite>();
-            var cnSprites = new Sprite[comboNumbers.spriteCount];
-            comboNumbers.GetSprites(cnSprites);
+        private static Dictionary<int, Sprite> LoadSprites(SpriteAtlas atlas) {
+            var spriteSet = new Dictionary<int, Sprite>();
+            var cnSprites = new Sprite[atlas.spriteCount];
+            atlas.GetSprites(cnSprites);
             var separator = new char[] { '_', '(' };
             foreach (var sp in cnSprites) {
                 spriteSet.Add(int.Parse(sp.name.Split(separator)[1]), sp);
             }
+            return spriteSet;
         }
     }
 }
