@@ -165,6 +165,7 @@ namespace BCPG9 {
 
             if (isCorrect)
                 SetQuiz();
+            CallGameEvent(BCPG9GameEventType.ResetInput);
             ResumeGame();
 
             yield return null;

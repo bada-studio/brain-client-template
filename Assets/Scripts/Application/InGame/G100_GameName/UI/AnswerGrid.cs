@@ -16,7 +16,10 @@ namespace BCPG9 {
                 case BCPG9GameEventType.NewQuiz:
                     UpdateAnswer(playData.rule);
                     UpdateInput(string.Empty);
-                    UpdateColorOnReset();
+                    UpdateColorOnNormal();
+                    break;
+                case BCPG9GameEventType.ResetInput:
+                    UpdateColorOnNormal();
                     break;
                 case BCPG9GameEventType.Input:
                     UpdateInput(input);
@@ -40,7 +43,7 @@ namespace BCPG9 {
             cellList[3].UpdateCharacter(input.Length > 1 ? input[1] : ' ');
         }
 
-        private void UpdateColorOnReset() {
+        private void UpdateColorOnNormal() {
             cellList.ForEach(_ => SetNormalColor(_));
         }
         private void UpdateColorOnCorrect() {
