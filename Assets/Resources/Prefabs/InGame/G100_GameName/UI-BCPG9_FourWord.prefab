@@ -1269,7 +1269,7 @@ GameObject:
   - component: {fileID: 5396886829851810961}
   - component: {fileID: 2008967919}
   m_Layer: 5
-  m_Name: UI-BCPG9
+  m_Name: UI-BCPG9_FourWord
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
