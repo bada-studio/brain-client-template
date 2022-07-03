@@ -1258,6 +1258,11 @@ MonoBehaviour:
   - {fileID: 3407657644479578306}
   - {fileID: 5057429226029609109}
   - {fileID: 7185963937360395933}
+  normalImgColor: {r: 0.9490196, g: 0.9529412, b: 0.9607843, a: 1}
+  correctImgColor: {r: 1, g: 0.8352941, b: 0.18039216, a: 1}
+  incorrectImgColor: {r: 0.98039216, g: 0.7372549, b: 0.654902, a: 1}
+  normalTextColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  incorrectTextColor: {r: 0.96862745, g: 0.4627451, b: 0.105882354, a: 1}
 --- !u!1 &5396886829851810960
 GameObject:
   m_ObjectHideFlags: 0
@@ -2228,6 +2233,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeText: {fileID: 8343341152680853504}
+  normalColor: {r: 0, g: 0, b: 0, a: 1}
+  alertTextColor: {r: 0.9882353, g: 0.36078432, b: 0.3137255, a: 1}
 --- !u!1 &8409060689683200897
 GameObject:
   m_ObjectHideFlags: 0

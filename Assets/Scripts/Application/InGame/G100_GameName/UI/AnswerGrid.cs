@@ -5,27 +5,27 @@ using UnityEngine;
 namespace BCPG9 {
     public class AnswerGrid : MonoBehaviour, IUIEventCallback {
         [SerializeField] List<AnswerCell> cellList;
+        [SerializeField] private Color normalImgColor;
+        [SerializeField] private Color correctImgColor;
+        [SerializeField] private Color incorrectImgColor;
+        [SerializeField] private Color normalTextColor;
+        [SerializeField] private Color incorrectTextColor;
 
         public void OnEventCall(BCPG9GameEventType eventType, BCPG9GameData gameData, BCPG9PlayData playData, string input = null) {
             switch (eventType) {
-                case BCPG9GameEventType.Reset:
-                    ChangeTextColor(false);
-                    break;
                 case BCPG9GameEventType.NewQuiz:
                     UpdateAnswer(playData.rule);
                     UpdateInput(string.Empty);
+                    UpdateColorOnReset();
                     break;
                 case BCPG9GameEventType.Input:
                     UpdateInput(input);
                     break;
                 case BCPG9GameEventType.Correct:
-                    ShowCorrect();
+                    UpdateColorOnCorrect();
                     break;
                 case BCPG9GameEventType.Incorrect:
-                    ShowIncorrect();
-                    break;
-                case BCPG9GameEventType.CloseEnd:
-                    ChangeTextColor(true);
+                    UpdateColorOnIncorrect();
                     break;
             }
         }
@@ -38,23 +38,34 @@ namespace BCPG9 {
         private void UpdateInput(string input) {
             cellList[2].UpdateCharacter(input.Length > 0 ? input[0] : ' ');
             cellList[3].UpdateCharacter(input.Length > 1 ? input[1] : ' ');
-            cellList[2].ChangeTextColor(false);
-            cellList[3].ChangeTextColor(false);
         }
 
-        private void ShowCorrect() {
-            cellList[2].ShowCorrectUI();
-            cellList[3].ShowCorrectUI();
+        private void UpdateColorOnReset() {
+            cellList.ForEach(_ => SetNormalColor(_));
+        }
+        private void UpdateColorOnCorrect() {
+            SetNormalColor(cellList[0]);
+            SetNormalColor(cellList[1]);
+            SetCorrectColor(cellList[2]);
+            SetCorrectColor(cellList[3]);
+        }
+        private void UpdateColorOnIncorrect() {
+            SetNormalColor(cellList[0]);
+            SetNormalColor(cellList[1]);
+            SetIncorrectColor(cellList[2]);
+            SetIncorrectColor(cellList[3]);
         }
 
-        private void ShowIncorrect() {
-            cellList[2].ShowIncorrectUI();
-            cellList[3].ShowIncorrectUI();
+        private void SetCorrectColor(AnswerCell cell) {
+            cell.UpdateColor(correctImgColor, normalTextColor);
         }
 
-        private void ChangeTextColor(bool isAlert) {
-            cellList[0].ChangeTextColor(isAlert);
-            cellList[1].ChangeTextColor(isAlert);
+        private void SetIncorrectColor(AnswerCell cell) {
+            cell.UpdateColor(incorrectImgColor, incorrectTextColor);
+        }
+
+        private void SetNormalColor(AnswerCell cell) {
+            cell.UpdateColor(normalImgColor, normalTextColor);
         }
     }
 }
