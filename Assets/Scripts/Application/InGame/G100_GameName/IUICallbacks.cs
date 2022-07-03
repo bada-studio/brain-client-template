@@ -7,6 +7,8 @@ namespace BCPG9 {
         Pass,
         Correct,
         Incorrect,
+        CloseEnd,
+        End,
         Pause,
         Resume
     }
@@ -30,7 +32,7 @@ namespace BCPG9 {
     }
 
     interface IUIEventCallback {
-        public void OnEventCall(BCPG9GameEventType eventType, BCPG9GameData gameData, BCPG9PlayData playData);
+        public void OnEventCall(BCPG9GameEventType eventType, BCPG9GameData gameData, BCPG9PlayData playData, string input = null);
     }
 
     interface IUIUpdateCallback {

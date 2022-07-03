@@ -8,7 +8,7 @@ namespace BCPG9 {
 
         public int comboCount { get; private set; }
         public int currentScore { get; private set; }
-        public string currentAnswer { get; private set; }
+        public Dictionary<string, string> currentAnswer { get; private set; }
         public float remainComboTime => comboCheckTime - (timer.time - lastCheckTime);
 
         private float lastCheckTime;
@@ -33,15 +33,11 @@ namespace BCPG9 {
         }
 
         public void SetAnswer(BCPG9Rule rule) {
-            currentAnswer = rule.word.Substring(2, 2);
+            currentAnswer = rule.answer;
         }
 
-        public bool CheckNotEnd(string answer) {
-            return currentAnswer[0] == answer[0];
-        }
-
-        public bool CheckAnswer(string answer) {
-            bool isCorrect = currentAnswer.CompareTo(answer) == 0;
+        public bool CheckAnswer(string input) {
+            bool isCorrect = currentAnswer.ContainsKey(input);
             if (isCorrect) {
                 CheckCombo();
                 AddScore();

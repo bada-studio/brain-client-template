@@ -21,7 +21,9 @@ namespace BCPG9 {
     /*기능설명*/
     public class BCPG9_FourWord : MonoBehaviour, ServiceStatePresenter {
         public static void CallGlobalEvent(BCPG9GameEventType eType) => globalEventCall?.Invoke(eType);
+        public static void CallInputEvent(InputField field) => inputEventCall?.Invoke(field);
         private static UnityEvent<BCPG9GameEventType> globalEventCall;
+        private static UnityEvent<InputField> inputEventCall;
 
         [SerializeField] BCPG9GameData gameData;
         [SerializeField] InGameUIController uiController;
@@ -33,6 +35,8 @@ namespace BCPG9 {
         private Dictionary<int, BCPG9Rule> rules;
         private BCPG9PlayData playData;
         private bool isPaused = false;
+        private bool isCloseEnd = false;
+        private string currentInput;
 
         public async void Start() {
             var isInit = await Boot();
@@ -47,8 +51,13 @@ namespace BCPG9 {
                 timer.UpdateTimer();
                 UpdatePlayData();
                 uiController.CallUpdate(playData);
-                if (timer.isTimeExpired)
+                if (timer.remainTime <= 10 && !isCloseEnd) {
+                    isCloseEnd = true;
+                    CallGameEvent(BCPG9GameEventType.CloseEnd);
+                }
+                if (timer.isTimeExpired) {
                     GameEnd();
+                }
             }
         }
 
@@ -63,6 +72,7 @@ namespace BCPG9 {
             switch (eventType) {
                 case BCPG9GameEventType.HintOpen:
                     scoreManager.ClearCombo();
+                    uiController.OpenKeyboard();
                     break;
                 case BCPG9GameEventType.Pass:
                     scoreManager.PassAnswer();
@@ -71,7 +81,7 @@ namespace BCPG9 {
             }
 
             UpdatePlayData();
-            uiController.CallEvent(eventType, gameData, playData);
+            uiController.CallEvent(eventType, gameData, playData, currentInput);
         }
 
         #region Pause and Resume
@@ -95,7 +105,9 @@ namespace BCPG9 {
         #region Game Loop 
         private void Initialize() {
             globalEventCall = new UnityEvent<BCPG9GameEventType>();
+            inputEventCall = new UnityEvent<InputField>();
             globalEventCall.AddListener(CallGameEvent);
+            inputEventCall.AddListener(OnInputAnswer);
 
             rules = BCPG9_RuleService.instance.bcpg9Rule;
             indexProvider = new RuleIndexProvider(rules.Keys.ToList());
@@ -114,6 +126,7 @@ namespace BCPG9 {
             UpdatePlayData();
             CallGameEvent(BCPG9GameEventType.Reset);
             isPaused = false;
+            isCloseEnd = false;
             uiController.LockInteraction(false);
             SetQuiz();
         }
@@ -122,16 +135,29 @@ namespace BCPG9 {
             playData.rule = rules[indexProvider.GetIndex()];
             scoreManager.SetAnswer(playData.rule);
             CallGameEvent(BCPG9GameEventType.NewQuiz);
+            uiController.OpenKeyboard();
         }
 
-        public void OnAnswer(string answer) {
-            if (answer.Length >= 2) {
-                var isNotEnd = scoreManager.CheckNotEnd(answer);
-                var isCorrect = scoreManager.CheckAnswer(answer);
-                if (isNotEnd && !isCorrect)
+        public void OnInputAnswer(InputField field) {
+            currentInput = field.text;
+            CallGameEvent(BCPG9GameEventType.Input);
+            if (currentInput.Length >= 2) {
+                var isCorrect = scoreManager.CheckAnswer(currentInput);
+                if (!CheckInputEnd(currentInput) && !isCorrect) {
+                    Debug.Log(CheckInputEnd(currentInput));
                     return;
+                }
                 StartCoroutine(AnswerWaitRoutine(isCorrect));
             }
+        }
+
+        private static bool CheckInputEnd(string input) {
+            var lastCode = (int)input.Last();
+            bool isNotComplete = (lastCode - 0xAC00) % 28 == 0;
+            bool isNotSingle = lastCode >= 0xAC00 && lastCode <= 0xD7A3;
+            if (isNotComplete || !isNotSingle)
+                return false;
+            return true;
         }
 
         IEnumerator AnswerWaitRoutine(bool isCorrect) {
@@ -155,6 +181,7 @@ namespace BCPG9 {
         private void GameEnd() {
             PauseGame();
             uiController.ShowBottomPanel();
+            CallGameEvent(BCPG9GameEventType.End);
         }
         #endregion
 

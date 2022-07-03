@@ -20,6 +20,9 @@ namespace BCPG9 {
         }
 
         public void ShowCombo(int comboCount) {
+            if (comboCount < 2)
+                return;
+
             SetComboNumber(comboCount);
             holder.SetActive(true);
             StartCoroutine(ShowComboRoutine());
@@ -35,7 +38,12 @@ namespace BCPG9 {
             var ten = comboCount / 10;
             var one = comboCount % 10;
 
-            tenImage.sprite = spriteSet[ten];
+            if (ten < 1) {
+                tenImage.gameObject.SetActive(false);
+            } else {
+                tenImage.gameObject.SetActive(true);
+                tenImage.sprite = spriteSet[ten];
+            }
             oneImage.sprite = spriteSet[one];
         }
 

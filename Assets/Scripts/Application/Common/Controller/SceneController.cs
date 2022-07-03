@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 public enum SceneType {
     Intro,
-    G100_GameName,
+    BCPG9_FourWord,
 }
 
 public interface SceneController {

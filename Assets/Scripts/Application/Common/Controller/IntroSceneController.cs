@@ -24,7 +24,7 @@ public class IntroSceneController : SceneControllerBase, ServiceStatePresenter {
         }
         
         //mainScene
-        SwitchScene(SceneType.G100_GameName).RunAsync();
+        SwitchScene(SceneType.BCPG9_FourWord).RunAsync();
     }
 
     public void ShowServiceState(string key) {
