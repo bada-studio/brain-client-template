@@ -101,10 +101,8 @@ namespace BCPG9 {
         #region FSM Actions 
         private void Initialize() {
             Debug.Log("Initialize Start");
-            globalEventCall = new UnityEvent<BCPG9GameEventType>();
-            inputEventCall = new UnityEvent<InputField>();
-            globalEventCall.AddListener(CallGameEvent);
-            inputEventCall.AddListener(OnInputAnswer);
+            globalEventCall ??= new UnityEvent<BCPG9GameEventType>();
+            inputEventCall ??= new UnityEvent<InputField>();
 
             rules = BCPG9_RuleService.instance.bcpg9Rule;
             indexProvider = new RandomIndexProvider(rules.Keys.ToList());
@@ -120,6 +118,9 @@ namespace BCPG9 {
         }
 
         private void OnReset() {
+            globalEventCall.AddListener(CallGameEvent);
+            inputEventCall.AddListener(OnInputAnswer);
+            
             Debug.Log("Reset State");
             uiController.gameObject.SetActive(true);
             indexProvider.ResetIndex();
@@ -164,6 +165,9 @@ namespace BCPG9 {
             PauseGame();
             popupController.ShowBottomPanel();
             CallGlobalEvent(BCPG9GameEventType.End);
+
+            globalEventCall.RemoveAllListeners();
+            inputEventCall.RemoveAllListeners();
         }
         #endregion
 
