@@ -8,30 +8,35 @@
 * @desc G100_GameName Template
 */
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
-using CnControls;
-using DG.Tweening;
 
 namespace BCPG9 {
-    /*기능설명*/
+    /*
+        Game Start Point
+        Object Initialize -> Fsm transition,UI Controller Event Sending -> Game End 
+    */
     public class BCPG9_FourWord : MonoBehaviour, ServiceStatePresenter {
+        #region Event Binder
         public static void CallGlobalEvent(BCPG9GameEventType eType) => globalEventCall?.Invoke(eType);
         public static void CallInputEvent(InputField field) => inputEventCall?.Invoke(field);
         private static UnityEvent<BCPG9GameEventType> globalEventCall;
         private static UnityEvent<InputField> inputEventCall;
+        #endregion
 
+        #region Serialize Field
         [SerializeField] BCPG9GameSettings gameData;
         [SerializeField] BCPG9_UIController uiController;
         [SerializeField] PopupController popupController;
         [SerializeField] Timer timer;
         [SerializeField] ScoreManager scoreManager;
         [SerializeField] Animator state;
+        #endregion
 
+        #region Private Field
         private List<IGameModule> modules;
         private RandomIndexProvider indexProvider;
         private Dictionary<int, BCPG9Rule> rules;
@@ -39,7 +44,9 @@ namespace BCPG9 {
         private bool isPaused = false;
         private bool isCloseEnd = false;
         private string currentInput;
+        #endregion
 
+        #region MonoBehaviour
         public async void Start() {
             var isInit = await Boot();
             if (!isInit)
@@ -54,28 +61,30 @@ namespace BCPG9 {
                 uiController.CallUpdate(playData);
                 if (timer.remainTime <= 10 && !isCloseEnd) {
                     isCloseEnd = true;
-                    CallGameEvent(BCPG9GameEventType.CloseEnd);
+                    CallGlobalEvent(BCPG9GameEventType.CloseEnd);
                 }
                 if (timer.isTimeExpired) {
                     state.SetTrigger("End");
                 }
             }
         }
+        #endregion
 
+        #region Public Method
+        // Go to game start state
         public void ResetGame() {
             state.SetTrigger("Reset");
         }
 
-        #region Async Controls
         public void PauseGame() {
             isPaused = true;
             uiController.LockInteraction(true);
-            CallGameEvent(BCPG9GameEventType.Pause);
+            CallGlobalEvent(BCPG9GameEventType.Pause);
         }
 
         public void ResumeGame() {
             isPaused = false;
-            CallGameEvent(BCPG9GameEventType.Resume);
+            CallGlobalEvent(BCPG9GameEventType.Resume);
             uiController.LockInteraction(false);
         }
         #endregion
@@ -89,7 +98,7 @@ namespace BCPG9 {
             Reset: 게임 초기화 시
             Quit: 게임 종료
         */
-        #region Game Loop 
+        #region FSM Actions 
         private void Initialize() {
             Debug.Log("Initialize Start");
             globalEventCall = new UnityEvent<BCPG9GameEventType>();
@@ -116,7 +125,7 @@ namespace BCPG9 {
             indexProvider.ResetIndex();
             modules.ForEach(_ => _.ResetModule());
             UpdatePlayData();
-            CallGameEvent(BCPG9GameEventType.Reset);
+            CallGlobalEvent(BCPG9GameEventType.Reset);
             isPaused = false;
             isCloseEnd = false;
             uiController.LockInteraction(false);
@@ -126,39 +135,43 @@ namespace BCPG9 {
             Debug.Log("NewQuiz State");
             playData.rule = rules[indexProvider.GetIndex()];
             scoreManager.SetAnswer(playData.rule);
-            CallGameEvent(BCPG9GameEventType.NewQuiz);
-            uiController.OpenKeyboard();
+            CallGlobalEvent(BCPG9GameEventType.NewQuiz);
+            uiController.SetKeyboard(true);
         }
 
         private void OnIdle() {
             Debug.Log("Idle State");
             ResumeGame();
-            CallGameEvent(BCPG9GameEventType.ResetInput);
+            CallGlobalEvent(BCPG9GameEventType.ResetInput);
         }
 
         private void OnCorrect() {
             Debug.Log("Correct State");
             PauseGame();
-            CallGameEvent(BCPG9GameEventType.Correct);
+            CallGlobalEvent(BCPG9GameEventType.Correct);
             popupController.ShowResult(true, scoreManager.comboCount);
         }
 
         private void OnIncorrect() {
             Debug.Log("Incorrect State");
             PauseGame();
-            CallGameEvent(BCPG9GameEventType.Incorrect);
+            CallGlobalEvent(BCPG9GameEventType.Incorrect);
             popupController.ShowResult(false, scoreManager.comboCount);
         }
         private void OnEnd() {
             Debug.Log("End State");
             PauseGame();
+            uiController.SetKeyboard(false);
             popupController.ShowBottomPanel();
-            CallGameEvent(BCPG9GameEventType.End);
+            CallGlobalEvent(BCPG9GameEventType.End);
         }
+        #endregion
 
-        public void OnInputAnswer(InputField field) {
+        #region Event Handler
+        // Handle Input Event
+        private void OnInputAnswer(InputField field) {
             currentInput = field.text;
-            CallGameEvent(BCPG9GameEventType.Input);
+            CallGlobalEvent(BCPG9GameEventType.Input);
             if (currentInput.Length >= 2) {
                 var isCorrect = scoreManager.CheckAnswer(currentInput);
                 if (!field.CheckKoreanInputEnd() && !isCorrect) {
@@ -168,20 +181,13 @@ namespace BCPG9 {
                 state.SetTrigger(isCorrect ? "Correct" : "Incorrect");
             }
         }
-        #endregion
 
-        private void UpdatePlayData() {
-            playData.comboCount = scoreManager.comboCount;
-            playData.score = scoreManager.currentScore;
-            playData.remainTime = timer.remainTimeInt;
-            playData.remainTimeRatio = timer.remainTime / gameData.limitedTime;
-        }
-
+        // Handle Global Sending Event
         private void CallGameEvent(BCPG9GameEventType eventType) {
             switch (eventType) {
                 case BCPG9GameEventType.HintOpen:
                     scoreManager.ClearCombo();
-                    uiController.OpenKeyboard();
+                    uiController.SetKeyboard(true);
                     break;
                 case BCPG9GameEventType.Pass:
                     scoreManager.PassAnswer();
@@ -191,6 +197,14 @@ namespace BCPG9 {
 
             UpdatePlayData();
             uiController.CallEvent(eventType, gameData, playData, currentInput);
+        }
+        #endregion
+
+        private void UpdatePlayData() {
+            playData.comboCount = scoreManager.comboCount;
+            playData.score = scoreManager.currentScore;
+            playData.remainTime = timer.remainTimeInt;
+            playData.remainTimeRatio = timer.remainTime / gameData.limitedTime;
         }
 
         #region IntroSceneController.cs Copy

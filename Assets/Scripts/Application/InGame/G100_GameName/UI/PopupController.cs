@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace BCPG9 {
+    /*
+        Default UI Popup Layer Components Controller
+    */
     public class PopupController : MonoBehaviour {
         [SerializeField] private ResultPopup resultPopup;
         [SerializeField] private BottomPanel bottomPanel;

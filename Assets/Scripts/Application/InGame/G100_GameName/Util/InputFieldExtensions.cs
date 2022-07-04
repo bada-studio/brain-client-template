@@ -1,7 +1,12 @@
 using UnityEngine.UI;
 
 namespace BCPG9 {
+    /*
+        Input Field Custom Extension
+        Check Korean string last character is complete word.
+    */
     public static class InputFieldExtensions {
+#warning Todo: iOS Korean Encoding Support
         public static bool CheckKoreanInputEnd(this InputField field) {
             return CheckKoreanInputUnicode(field.text);
         }

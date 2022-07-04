@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace BCPG9 {
+    /*
+        Control Middle Button Group {Help, Hint, Pass}
+    */
     public class ButtonGroup : MonoBehaviour, IUIEventCallback {
         [SerializeField] private GameObject infoButton;
         [SerializeField] private GameObject hintButton;
@@ -19,6 +21,7 @@ namespace BCPG9 {
             nextButton.SetActive(true);
         }
 
+        #warning Open Game Information Button Event Listner
         public void OnClickInfoButton() {
 
         }

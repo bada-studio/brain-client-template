@@ -1,8 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace BCPG9 {
+    /*
+        Control Answer Text Grid Group Image and Text Color
+        Handler Input Event
+    */
     public class AnswerGrid : MonoBehaviour, IUIEventCallback {
         [SerializeField] List<AnswerCell> cellList;
         [SerializeField] private Color normalImgColor;

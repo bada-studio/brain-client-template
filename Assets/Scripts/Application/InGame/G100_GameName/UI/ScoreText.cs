@@ -1,9 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace BCPG9 {
+    /*
+        Header Score Text Component Event Handler
+    */
     public class ScoreText : MonoBehaviour, IUIEventCallback {
         [SerializeField] private Text scoreText;
 

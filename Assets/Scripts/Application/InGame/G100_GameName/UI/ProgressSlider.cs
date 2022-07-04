@@ -1,9 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace BCPG9 {
+    /*
+        Header Progress Bar Slider Component Event Handler
+    */
     public class ProgressSlider : MonoBehaviour, IUIUpdateCallback, IUIEventCallback {
         [SerializeField] Slider progressSlider;
         [SerializeField] Image fillImage;

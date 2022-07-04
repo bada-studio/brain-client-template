@@ -1,13 +1,11 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using UnityEngine;
-using UnityEngine.UI;
 
 namespace BCPG9 {
+    /*
+        Load BCPG-9 Json Text File
+    */
     public class BCPG9_RuleService : Singleton<BCPG9_RuleService>, IService {
         public ServiceType type => ServiceType.Rule;
         public Dictionary<int, BCPG9Rule> bcpg9Rule { get; private set; }

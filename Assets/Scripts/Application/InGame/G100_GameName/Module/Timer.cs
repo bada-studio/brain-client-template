@@ -1,7 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 namespace BCPG9 {
+    /*
+        Timer, has no update behaviour. Control by BCPG9_FourWord.cs (GameManager)
+    */
     public class Timer : MonoBehaviour, IGameModule {
         public float time { get; private set; }
         

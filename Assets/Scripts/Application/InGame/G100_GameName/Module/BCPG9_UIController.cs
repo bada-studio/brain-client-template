@@ -1,12 +1,15 @@
-using System;
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Threading.Tasks;
 using UnityEngine.UI;
 
 namespace BCPG9 {
+    /*
+        Find All Event Listners and Publish Message.
+        Screen Lock
+        Attend InputField Listener
+        Virtual Keyboard Control
+    */
     public class BCPG9_UIController : MonoBehaviour, IGameModule {
         [SerializeField] InputField answerInputField;
         [SerializeField] GameObject screenLock;
@@ -38,7 +41,6 @@ namespace BCPG9 {
         public void LockInteraction(bool isLock) {
             screenLock.SetActive(isLock);
             if (isLock) {
-                answerInputField.DeactivateInputField();
                 answerInputField.interactable = false;
             } else {
                 answerInputField.interactable = true;
@@ -47,8 +49,11 @@ namespace BCPG9 {
             }
         }
 
-        public void OpenKeyboard() {
-            answerInputField.ActivateInputField();
+        public void SetKeyboard(bool isActive) {
+            if (isActive)
+                answerInputField.ActivateInputField();
+            else
+                answerInputField.DeactivateInputField();
         }
 
         private void OnInputValueChange(string input) {

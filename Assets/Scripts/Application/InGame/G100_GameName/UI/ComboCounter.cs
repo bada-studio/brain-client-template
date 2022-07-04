@@ -5,8 +5,10 @@ using UnityEngine.UI;
 using UnityEngine.U2D;
 
 namespace BCPG9 {
+    /*
+        Change combo number by count
+    */
     public class ComboCounter : MonoBehaviour {
-        [SerializeField] private SpriteAtlas comboNumbers;
         [SerializeField] private GameObject holder;
         [SerializeField] private Image tenImage;
         [SerializeField] private Image oneImage;
@@ -47,6 +49,8 @@ namespace BCPG9 {
             oneImage.sprite = spriteSet[one];
         }
 
+        #warning If use custom sprite atlas manager, change this section
+        [SerializeField] private SpriteAtlas comboNumbers;
         private static Dictionary<int, Sprite> LoadSprites(SpriteAtlas atlas) {
             var spriteSet = new Dictionary<int, Sprite>();
             var cnSprites = new Sprite[atlas.spriteCount];

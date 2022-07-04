@@ -1,8 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace BCPG9 {
+    /*
+        Check Score and Combo.
+    */
     public class ScoreManager : MonoBehaviour, IGameModule {
         [SerializeField] private Timer timer;
 

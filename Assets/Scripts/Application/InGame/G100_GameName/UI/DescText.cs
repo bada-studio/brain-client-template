@@ -1,10 +1,11 @@
 using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace BCPG9 {
+    /*
+        Answer Description Text Component Event Handler
+    */
     public class DescText : MonoBehaviour, IUIEventCallback {
         [SerializeField] private Text descText;
 

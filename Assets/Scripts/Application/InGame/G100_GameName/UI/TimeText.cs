@@ -1,9 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace BCPG9 {
+    /*
+        Header Time Text Component Event Handler
+    */
     public class TimeText : MonoBehaviour, IUIUpdateCallback, IUIEventCallback {
         [SerializeField] private Text timeText;
         [SerializeField] private Color normalColor;
