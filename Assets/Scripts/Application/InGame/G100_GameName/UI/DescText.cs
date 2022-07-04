@@ -15,7 +15,7 @@ namespace BCPG9 {
                     descText.gameObject.SetActive(false);
                     break;
                 case BCPG9GameEventType.HintOpen:
-                    OpenDesc(PickRandomDesc(playData.rule));
+                    OpenDesc(PickFixedDesc(playData.rule));
                     break;
                 case BCPG9GameEventType.Correct:
                     OpenDesc(playData.rule.answer[input]);
@@ -32,6 +32,10 @@ namespace BCPG9 {
             var answerDict = rule.answer;
             var randomIndex = Random.Range(0, answerDict.Count);
             return answerDict.ElementAt(randomIndex).Value;
+        }
+
+        private static string PickFixedDesc(BCPG9Rule rule) {
+            return rule.answer[rule.hint];
         }
     }
 }
