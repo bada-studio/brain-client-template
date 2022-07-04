@@ -20,6 +20,8 @@ namespace BCPG9 {
             updateCallbacks = GetComponentsInChildren<IUIUpdateCallback>().ToList();
             inputFields = GetComponentsInChildren<InputField>().ToList();
             answerInputField.onValueChanged.AddListener(OnInputValueChange);
+
+            Debug.Log($"Event Callbacks:{eventCallbacks.Count}  Update Callbacks:{updateCallbacks.Count}");
         }
 
         public void ResetModule() {
@@ -35,8 +37,11 @@ namespace BCPG9 {
 
         public void LockInteraction(bool isLock) {
             screenLock.SetActive(isLock);
-            answerInputField.interactable = !isLock;
-            if (!isLock) {
+            if (isLock) {
+                answerInputField.DeactivateInputField();
+                answerInputField.interactable = false;
+            } else {
+                answerInputField.interactable = true;
                 answerInputField.ActivateInputField();
                 answerInputField.text = "";
             }

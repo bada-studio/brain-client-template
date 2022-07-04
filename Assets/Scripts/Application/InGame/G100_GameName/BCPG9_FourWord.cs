@@ -62,21 +62,21 @@ namespace BCPG9 {
             }
         }
 
-        #region Pause and Resume
+        public void ResetGame() {
+            state.SetTrigger("Reset");
+        }
+
+        #region Async Controls
         public void PauseGame() {
+            isPaused = true;
             uiController.LockInteraction(true);
             CallGameEvent(BCPG9GameEventType.Pause);
-            isPaused = true;
         }
 
         public void ResumeGame() {
-            CallGameEvent(BCPG9GameEventType.Resume);
             isPaused = false;
+            CallGameEvent(BCPG9GameEventType.Resume);
             uiController.LockInteraction(false);
-        }
-
-        public void ResetGame() {
-            state.SetTrigger("Reset");
         }
         #endregion
 
@@ -91,6 +91,7 @@ namespace BCPG9 {
         */
         #region Game Loop 
         private void Initialize() {
+            Debug.Log("Initialize Start");
             globalEventCall = new UnityEvent<BCPG9GameEventType>();
             inputEventCall = new UnityEvent<InputField>();
             globalEventCall.AddListener(CallGameEvent);
@@ -110,6 +111,7 @@ namespace BCPG9 {
         }
 
         private void OnReset() {
+            Debug.Log("Reset State");
             uiController.gameObject.SetActive(true);
             indexProvider.ResetIndex();
             modules.ForEach(_ => _.ResetModule());
@@ -121,6 +123,7 @@ namespace BCPG9 {
         }
 
         private void OnNewQuiz() {
+            Debug.Log("NewQuiz State");
             playData.rule = rules[indexProvider.GetIndex()];
             scoreManager.SetAnswer(playData.rule);
             CallGameEvent(BCPG9GameEventType.NewQuiz);
@@ -128,20 +131,29 @@ namespace BCPG9 {
         }
 
         private void OnIdle() {
+            Debug.Log("Idle State");
             ResumeGame();
             CallGameEvent(BCPG9GameEventType.ResetInput);
         }
 
         private void OnCorrect() {
+            Debug.Log("Correct State");
             PauseGame();
             CallGameEvent(BCPG9GameEventType.Correct);
             popupController.ShowResult(true, scoreManager.comboCount);
         }
 
         private void OnIncorrect() {
+            Debug.Log("Incorrect State");
             PauseGame();
             CallGameEvent(BCPG9GameEventType.Incorrect);
             popupController.ShowResult(false, scoreManager.comboCount);
+        }
+        private void OnEnd() {
+            Debug.Log("End State");
+            PauseGame();
+            popupController.ShowBottomPanel();
+            CallGameEvent(BCPG9GameEventType.End);
         }
 
         public void OnInputAnswer(InputField field) {
@@ -155,12 +167,6 @@ namespace BCPG9 {
                 }
                 state.SetTrigger(isCorrect ? "Correct" : "Incorrect");
             }
-        }
-
-        private void OnEnd() {
-            PauseGame();
-            popupController.ShowBottomPanel();
-            CallGameEvent(BCPG9GameEventType.End);
         }
         #endregion
 
