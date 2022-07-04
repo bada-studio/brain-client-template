@@ -160,8 +160,8 @@ namespace BCPG9 {
         }
         private void OnEnd() {
             Debug.Log("End State");
-            PauseGame();
             uiController.SetKeyboard(false);
+            PauseGame();
             popupController.ShowBottomPanel();
             CallGlobalEvent(BCPG9GameEventType.End);
         }
