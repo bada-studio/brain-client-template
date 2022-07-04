@@ -1,15 +1,18 @@
 namespace BCPG9 {
     public enum BCPG9GameEventType {
+        // State
         Reset,
-        ResetInput,
         NewQuiz,
+        Correct,
+        Incorrect,
+        End,
+
+        // Single Event
+        ResetInput,
         Input,
         HintOpen,
         Pass,
-        Correct,
-        Incorrect,
         CloseEnd,
-        End,
         Pause,
         Resume
     }

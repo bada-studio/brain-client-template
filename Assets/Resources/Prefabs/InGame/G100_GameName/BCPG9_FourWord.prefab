@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 3594947173265043932}
   - component: {fileID: 3594947173265043931}
   - component: {fileID: 3594947173265043930}
+  - component: {fileID: 5535421958134683077}
   m_Layer: 0
-  m_Name: BCPG_FourWord
+  m_Name: BCPG9_FourWord
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,6 +75,7 @@ MonoBehaviour:
   popupController: {fileID: 0}
   timer: {fileID: 3594947173265043931}
   scoreManager: {fileID: 3594947173265043930}
+  state: {fileID: 5535421958134683077}
 --- !u!114 &3594947173265043931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99,3 +101,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: {fileID: 3594947173265043931}
+--- !u!95 &5535421958134683077
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3594947173265043935}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a401216464015cb43b02725e0483a45a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

@@ -834,6 +834,38 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 848211960}
     m_Modifications:
+    - target: {fileID: 597148297382380324, guid: b543bbfa5638d8d48beaa9b9db8cfdca, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 597148297382380324, guid: b543bbfa5638d8d48beaa9b9db8cfdca, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3247952235101596918, guid: b543bbfa5638d8d48beaa9b9db8cfdca, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3247952235101596918, guid: b543bbfa5638d8d48beaa9b9db8cfdca, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232853892015240676, guid: b543bbfa5638d8d48beaa9b9db8cfdca, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232853892015240676, guid: b543bbfa5638d8d48beaa9b9db8cfdca, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232853892236274010, guid: b543bbfa5638d8d48beaa9b9db8cfdca, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5232853892236274010, guid: b543bbfa5638d8d48beaa9b9db8cfdca, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5396886829851810960, guid: b543bbfa5638d8d48beaa9b9db8cfdca, type: 3}
       propertyPath: m_Name
       value: UI-BCPG9_FourWord
@@ -928,6 +960,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5614376205261465281, guid: b543bbfa5638d8d48beaa9b9db8cfdca, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343341152680853507, guid: b543bbfa5638d8d48beaa9b9db8cfdca, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343341152680853507, guid: b543bbfa5638d8d48beaa9b9db8cfdca, type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1225,7 +1265,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3594947173265043935, guid: e41c61f944b3512429e418393b42ad62, type: 3}
       propertyPath: m_Name
-      value: BCPG_FourWord
+      value: BCPG9_FourWord
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e41c61f944b3512429e418393b42ad62, type: 3}

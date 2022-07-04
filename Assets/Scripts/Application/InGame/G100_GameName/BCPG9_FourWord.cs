@@ -30,6 +30,7 @@ namespace BCPG9 {
         [SerializeField] PopupController popupController;
         [SerializeField] Timer timer;
         [SerializeField] ScoreManager scoreManager;
+        [SerializeField] Animator state;
 
         private List<IGameModule> modules;
         private RandomIndexProvider indexProvider;
@@ -44,7 +45,6 @@ namespace BCPG9 {
             if (!isInit)
                 return;
             Initialize();
-            ResetGame();
         }
 
         private void Update() {
@@ -57,32 +57,9 @@ namespace BCPG9 {
                     CallGameEvent(BCPG9GameEventType.CloseEnd);
                 }
                 if (timer.isTimeExpired) {
-                    GameEnd();
+                    state.SetTrigger("End");
                 }
             }
-        }
-
-        private void UpdatePlayData() {
-            playData.comboCount = scoreManager.comboCount;
-            playData.score = scoreManager.currentScore;
-            playData.remainTime = timer.remainTimeInt;
-            playData.remainTimeRatio = timer.remainTime / gameData.limitedTime;
-        }
-
-        private void CallGameEvent(BCPG9GameEventType eventType) {
-            switch (eventType) {
-                case BCPG9GameEventType.HintOpen:
-                    scoreManager.ClearCombo();
-                    uiController.OpenKeyboard();
-                    break;
-                case BCPG9GameEventType.Pass:
-                    scoreManager.PassAnswer();
-                    SetQuiz();
-                    break;
-            }
-
-            UpdatePlayData();
-            uiController.CallEvent(eventType, gameData, playData, currentInput);
         }
 
         #region Pause and Resume
@@ -97,11 +74,20 @@ namespace BCPG9 {
             isPaused = false;
             uiController.LockInteraction(false);
         }
+
+        public void ResetGame() {
+            state.SetTrigger("Reset");
+        }
         #endregion
 
         /*
-            Initilaize -> Reset -> SetQuiz -> OnAnswer
-                                     ┕-----------┙
+            <Trigger List>
+            InitEnd: 초기화 끝난 후
+            Correct: 정답 시
+            Incorrect: 오답 시
+            End: 타이머 끝날 시
+            Reset: 게임 초기화 시
+            Quit: 게임 종료
         */
         #region Game Loop 
         private void Initialize() {
@@ -119,9 +105,12 @@ namespace BCPG9 {
             modules.Add(timer);
             modules.Add(uiController);
             modules.ForEach(_ => _.Initialize(gameData, this));
+            uiController.gameObject.SetActive(false);
+            state.SetTrigger("InitEnd");
         }
 
-        public void ResetGame() {
+        private void OnReset() {
+            uiController.gameObject.SetActive(true);
             indexProvider.ResetIndex();
             modules.ForEach(_ => _.ResetModule());
             UpdatePlayData();
@@ -129,14 +118,30 @@ namespace BCPG9 {
             isPaused = false;
             isCloseEnd = false;
             uiController.LockInteraction(false);
-            SetQuiz();
         }
 
-        private void SetQuiz() {
+        private void OnNewQuiz() {
             playData.rule = rules[indexProvider.GetIndex()];
             scoreManager.SetAnswer(playData.rule);
             CallGameEvent(BCPG9GameEventType.NewQuiz);
             uiController.OpenKeyboard();
+        }
+
+        private void OnIdle() {
+            ResumeGame();
+            CallGameEvent(BCPG9GameEventType.ResetInput);
+        }
+
+        private void OnCorrect() {
+            PauseGame();
+            CallGameEvent(BCPG9GameEventType.Correct);
+            popupController.ShowResult(true, scoreManager.comboCount);
+        }
+
+        private void OnIncorrect() {
+            PauseGame();
+            CallGameEvent(BCPG9GameEventType.Incorrect);
+            popupController.ShowResult(false, scoreManager.comboCount);
         }
 
         public void OnInputAnswer(InputField field) {
@@ -148,35 +153,39 @@ namespace BCPG9 {
                     Debug.Log(field.CheckKoreanInputEnd());
                     return;
                 }
-                StartCoroutine(AnswerWaitRoutine(isCorrect));
+                state.SetTrigger(isCorrect ? "Correct" : "Incorrect");
             }
         }
 
-        IEnumerator AnswerWaitRoutine(bool isCorrect) {
-            if (isCorrect)
-                CallGameEvent(BCPG9GameEventType.Correct);
-            else
-                CallGameEvent(BCPG9GameEventType.Incorrect);
-
-            var animWait = new WaitForSeconds(1.333f);
-            PauseGame();
-            popupController.ShowResult(isCorrect, scoreManager.comboCount);
-            yield return animWait;
-
-            if (isCorrect)
-                SetQuiz();
-            CallGameEvent(BCPG9GameEventType.ResetInput);
-            ResumeGame();
-
-            yield return null;
-        }
-
-        private void GameEnd() {
+        private void OnEnd() {
             PauseGame();
             popupController.ShowBottomPanel();
             CallGameEvent(BCPG9GameEventType.End);
         }
         #endregion
+
+        private void UpdatePlayData() {
+            playData.comboCount = scoreManager.comboCount;
+            playData.score = scoreManager.currentScore;
+            playData.remainTime = timer.remainTimeInt;
+            playData.remainTimeRatio = timer.remainTime / gameData.limitedTime;
+        }
+
+        private void CallGameEvent(BCPG9GameEventType eventType) {
+            switch (eventType) {
+                case BCPG9GameEventType.HintOpen:
+                    scoreManager.ClearCombo();
+                    uiController.OpenKeyboard();
+                    break;
+                case BCPG9GameEventType.Pass:
+                    scoreManager.PassAnswer();
+                    OnNewQuiz();
+                    break;
+            }
+
+            UpdatePlayData();
+            uiController.CallEvent(eventType, gameData, playData, currentInput);
+        }
 
         #region IntroSceneController.cs Copy
         public void ShowServiceState(string key) {
