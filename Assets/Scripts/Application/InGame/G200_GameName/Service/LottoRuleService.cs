@@ -49,15 +49,23 @@ public class LottoRuleService : Singleton<LottoRuleService>, IService
         return true;
     }
 
-    public int CalcScore(int totalAnswerCount, List<int> userMistakeList, List<int> missedAnswerList)
+    public int CalcScore(int totalAnswerCount, bool isUsedHint, List<int> userMistakeList, List<int> missedAnswerList)
     {
         userMistakeList.Sort();
         missedAnswerList.Sort();
 
         int score = (totalAnswerCount - userMistakeList.Count) * rule.correctNumberScore;
+        if (isUsedHint)
+        {
+            score = Mathf.FloorToInt(score * rule.hintPanelty);
+            score -= (score % 10);
+        }
+
         foreach (var answer in userMistakeList.Zip(missedAnswerList, System.Tuple.Create))
         {
             int mistakeScore = Mathf.FloorToInt(Mathf.Sqrt(((45 - Mathf.Abs(answer.Item1 - answer.Item2)) / 44.0f)) * rule.mistakeNumberScore);
+            if (isUsedHint)
+                mistakeScore = Mathf.FloorToInt(mistakeScore * rule.hintPanelty);
 
             score += (mistakeScore - (mistakeScore % 10));
         }

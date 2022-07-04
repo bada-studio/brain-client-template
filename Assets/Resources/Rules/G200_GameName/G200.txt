@@ -4,6 +4,8 @@
    "waitToRememberTime":2.0,
    "correctNumberScore":1000,
    "mistakeNumberScore":400,
+   "showHintTime":1.0,
+   "hintPanelty": 0.5,
    "puzzleCountMap":{
       "Normal":[
          8000,

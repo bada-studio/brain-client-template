@@ -29,6 +29,10 @@ public class PuzzlePanel : BasePanel
     private int cursorBallIndex;
     private string cursorNumber;
 
+    private bool isMovedCursor;
+
+    private bool isUsedHint;
+
     private void Awake()
     {
         puzzleAnimator = GetComponent<Animator>();
@@ -70,13 +74,15 @@ public class PuzzlePanel : BasePanel
 
         description.text = "꿈에서 본 숫자를 입력하세요.";
 
+        isMovedCursor = false;
+        isUsedHint = false;
         cursorBallIndex = 0;
         cursorNumber = "";
-        numberList[cursorBallIndex].SetNumber(LottoBall.Type.Cursor, 0);
+        numberList[cursorBallIndex].SetNumber(LottoBall.Type.Cursor, "", true, OnClickLottoBall);
 
         for (int i = 1; i < gameController.AnswerCount; ++i)
         {
-            numberList[i].SetNumber(LottoBall.Type.Empty, 0);
+            numberList[i].SetNumber(LottoBall.Type.Empty, 0, true, OnClickLottoBall);
         }
 
         for (int i = 0; i < gameController.AnswerCount; ++i)
@@ -85,31 +91,68 @@ public class PuzzlePanel : BasePanel
         }
     }
 
+    public void OnClickLottoBall(LottoBall activeLottoBall)
+    {
+        if (cursorBallIndex < gameController.AnswerCount)
+        {
+            LottoBall prevCursorBall = numberList[cursorBallIndex];
+            if (activeLottoBall == prevCursorBall)
+                return;
+
+            prevCursorBall.SetNumber(LottoBall.Type.Normal, -1, true, OnClickLottoBall);
+        }
+
+        for (int i = 0; i < numberList.Count; ++i)
+        {
+            if (activeLottoBall == numberList[i])
+            {
+                cursorBallIndex = i;
+                cursorNumber = activeLottoBall.GetNumberString();
+                break;
+            }
+        }
+
+        numberList[cursorBallIndex].SetNumber(LottoBall.Type.Cursor, -1, true, OnClickLottoBall);
+
+        isMovedCursor = true;
+    }
+
     public void OnClickKeypadNumber(string number)
     {
         if (gameController.AnswerCount <= cursorBallIndex)
             return;
 
+        if (isMovedCursor)
+        {
+            isMovedCursor = false;
+            cursorNumber = "";
+        }
+
         cursorNumber += number;
-        numberList[cursorBallIndex].SetNumber(LottoBall.Type.Normal, cursorNumber);
+        numberList[cursorBallIndex].SetNumber(LottoBall.Type.Cursor, cursorNumber, true, OnClickLottoBall);
 
         if (2 <= cursorNumber.Length)
         {
-            if (ValidateInputLottoNumber())
+            if (ValidateInputLottoNumber(numberList[cursorBallIndex]))
             {
+                numberList[cursorBallIndex].SetNumber(LottoBall.Type.Normal, numberList[cursorBallIndex].GetNumber(), true, OnClickLottoBall);
+
                 ++cursorBallIndex;
                 cursorNumber = "";
-                if (gameController.AnswerCount <= cursorBallIndex)
-                    confirmButton.interactable = true;
-                else
-                    numberList[cursorBallIndex].SetNumber(LottoBall.Type.Cursor, 0);
+                if (cursorBallIndex < gameController.AnswerCount)
+                {
+                    numberList[cursorBallIndex].SetNumber(LottoBall.Type.Cursor, -1, true, OnClickLottoBall);
+                    cursorNumber = numberList[cursorBallIndex].GetNumberString();
+                }
             }
             else
             {
                 cursorNumber = "";
-                numberList[cursorBallIndex].SetNumber(LottoBall.Type.Cursor, 0);
+                numberList[cursorBallIndex].SetNumber(LottoBall.Type.Cursor, cursorNumber, true, OnClickLottoBall);
             }
         }
+
+        confirmButton.interactable = ValidateLottoNumbers();
     }
 
     public void OnClickKeypadBack()
@@ -117,14 +160,18 @@ public class PuzzlePanel : BasePanel
         if (string.IsNullOrEmpty(cursorNumber) && 0 < cursorBallIndex)
         {
             if (cursorBallIndex != gameController.AnswerCount)
-                numberList[cursorBallIndex].SetNumber(LottoBall.Type.Empty, 0);
+                numberList[cursorBallIndex].SetNumber(LottoBall.Type.Empty, 0, true, OnClickLottoBall);
 
             --cursorBallIndex;
-            confirmButton.interactable = false;
         }
 
-        numberList[cursorBallIndex].SetNumber(LottoBall.Type.Cursor, 0);
-        cursorNumber = "";
+        cursorNumber = numberList[cursorBallIndex].GetNumberString();
+        if (!string.IsNullOrEmpty(cursorNumber))
+            cursorNumber = cursorNumber.Substring(0, cursorNumber.Length - 1);
+
+        numberList[cursorBallIndex].SetNumber(LottoBall.Type.Cursor, cursorNumber, true, OnClickLottoBall);
+
+        confirmButton.interactable = ValidateLottoNumbers();
     }
 
     public void OnClickConfirm()
@@ -134,6 +181,7 @@ public class PuzzlePanel : BasePanel
 
     public void OnClickHint()
     {
+        isUsedHint = true;
         gameController.StartCoroutine(CoEnableHint());
     }
 
@@ -141,21 +189,54 @@ public class PuzzlePanel : BasePanel
     {
         hintNumberBallRoot.gameObject.SetActive(true);
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(Service.lottoRule.rule.showHintTime);
 
         hintNumberBallRoot.gameObject.SetActive(false);
     }
 
-    private bool ValidateInputLottoNumber()
+    private bool ValidateInputLottoNumber(LottoBall numberBall)
     {
-        int number = numberList[cursorBallIndex].GetNumber();
+        int number = numberBall.GetNumber();
         if (45 < number)
             return false;
 
-        for (int i = 0; i < cursorBallIndex; ++i)
+        foreach (var element in numberList)
         {
-            if (numberList[i].GetNumber() == number)
+            if (!element.gameObject.activeSelf)
+                continue;
+
+            if (numberBall == element)
+                continue;
+
+            if (element.GetNumber() == number)
                 return false;
+        }
+
+        return true;
+    }
+
+    private bool ValidateLottoNumbers()
+    {
+        foreach (var leftElement in numberList)
+        {
+            if (!leftElement.gameObject.activeSelf)
+                continue;
+
+            var leftNumber = leftElement.GetNumber();
+            if (leftNumber == 0 || 45 < leftNumber)
+                return false;
+
+            foreach (var rightElement in numberList)
+            {
+                if (!rightElement.gameObject.activeSelf)
+                    continue;
+
+                if (leftElement == rightElement)
+                    continue;
+
+                if (leftNumber == rightElement.GetNumber())
+                    return false;
+            }
         }
 
         return true;
@@ -219,7 +300,7 @@ public class PuzzlePanel : BasePanel
         yield return new WaitForSeconds(0.3f);
 
         {
-            int score = Service.lottoRule.CalcScore(gameController.AnswerCount, userMistakeList, missedList);
+            int score = Service.lottoRule.CalcScore(gameController.AnswerCount, isUsedHint, userMistakeList, missedList);
             gameController.AddTotalScore(score);
 
             int grade = Service.lottoRule.CalcGrade(6 - userMistakeList.Count);
