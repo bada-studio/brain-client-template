@@ -120,7 +120,7 @@ namespace BCPG9 {
         private void OnReset() {
             globalEventCall.AddListener(CallGameEvent);
             inputEventCall.AddListener(OnInputAnswer);
-            
+
             Debug.Log("Reset State");
             uiController.gameObject.SetActive(true);
             indexProvider.ResetIndex();
@@ -137,13 +137,12 @@ namespace BCPG9 {
             playData.rule = rules[indexProvider.GetIndex()];
             scoreManager.SetAnswer(playData.rule);
             CallGlobalEvent(BCPG9GameEventType.NewQuiz);
-            uiController.SetKeyboard(true);
         }
 
         private void OnIdle() {
             Debug.Log("Idle State");
-            ResumeGame();
             CallGlobalEvent(BCPG9GameEventType.ResetInput);
+            ResumeGame();
         }
 
         private void OnCorrect() {
@@ -159,6 +158,13 @@ namespace BCPG9 {
             CallGlobalEvent(BCPG9GameEventType.Incorrect);
             popupController.ShowResult(false, scoreManager.comboCount);
         }
+
+        private void OnPass() {
+            Debug.Log("Pass State");
+            PauseGame();
+            scoreManager.OnPassAnswer();
+        }
+
         private void OnEnd() {
             Debug.Log("End State");
             uiController.SetKeyboard(false);
@@ -194,8 +200,7 @@ namespace BCPG9 {
                     uiController.SetKeyboard(true);
                     break;
                 case BCPG9GameEventType.Pass:
-                    scoreManager.PassAnswer();
-                    OnNewQuiz();
+                    state.SetTrigger("Pass");
                     break;
             }
 

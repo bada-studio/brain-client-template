@@ -17,6 +17,9 @@ namespace BCPG9 {
                 case BCPG9GameEventType.HintOpen:
                     OpenDesc(PickFixedDesc(playData.rule));
                     break;
+                case BCPG9GameEventType.Pass:
+                    OpenDesc(PickFixedDesc(playData.rule));
+                    break;
                 case BCPG9GameEventType.Correct:
                     OpenDesc(playData.rule.answer[input]);
                     break;

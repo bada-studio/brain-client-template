@@ -49,7 +49,7 @@ namespace BCPG9 {
             return isCorrect;
         }
 
-        public void PassAnswer() {
+        public void OnPassAnswer() {
             currentScore = Mathf.FloorToInt(currentScore * passMultiplier);
         }
 

@@ -33,6 +33,9 @@ namespace BCPG9 {
                 case BCPG9GameEventType.Incorrect:
                     UpdateColorOnIncorrect();
                     break;
+                case BCPG9GameEventType.Pass:
+                    UpdateInput(playData.rule.hint);
+                    break;
             }
         }
 
@@ -49,12 +52,14 @@ namespace BCPG9 {
         private void UpdateColorOnNormal() {
             cellList.ForEach(_ => SetNormalColor(_));
         }
+
         private void UpdateColorOnCorrect() {
             SetNormalColor(cellList[0]);
             SetNormalColor(cellList[1]);
             SetCorrectColor(cellList[2]);
             SetCorrectColor(cellList[3]);
         }
+
         private void UpdateColorOnIncorrect() {
             SetNormalColor(cellList[0]);
             SetNormalColor(cellList[1]);

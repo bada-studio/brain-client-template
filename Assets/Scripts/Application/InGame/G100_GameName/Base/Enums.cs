@@ -10,13 +10,13 @@ namespace BCPG9 {
         NewQuiz,
         Correct,
         Incorrect,
+        Pass,
         End,
 
         // Single Event
         ResetInput,
         Input,
         HintOpen,
-        Pass,
         CloseEnd,
         Pause,
         Resume
