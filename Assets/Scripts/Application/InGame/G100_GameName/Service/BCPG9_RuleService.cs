@@ -17,7 +17,7 @@ namespace BCPG9 {
 
         private void LoadLocalRules() {
             bcpg9Rule = new Dictionary<int, BCPG9Rule>();
-            LoadLocalRule<BCPG9Rule>("G100_GameName/BCPG9").ForEach(e => {
+            LoadLocalRule<BCPG9Rule>("G100_GameName/20220704SAMPLE").ForEach(e => {
                 bcpg9Rule.Add(e.index, e);
             });
         }
