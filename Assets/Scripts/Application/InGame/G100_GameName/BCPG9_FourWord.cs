@@ -178,6 +178,8 @@ namespace BCPG9 {
 
         #region Event Handler
         private void OnInput(string input) {
+            if (input != null && input.Length > 2)
+                input = input.Substring(0, 2);
             currentInput = input;
             CallGlobalEvent(BCPG9GameEventType.Input);
         }

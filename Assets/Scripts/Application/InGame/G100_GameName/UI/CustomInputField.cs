@@ -33,6 +33,7 @@ public class CustomInputField : MonoBehaviour {
         if (!isOpen || !canInput)
             return;
 
+
         if (currentKeyboard.text != lastInput) {
             lastInput = currentKeyboard.text;
             onValueChanged.Invoke(lastInput);
@@ -40,6 +41,10 @@ public class CustomInputField : MonoBehaviour {
 
         switch (currentKeyboard.status) {
             case TouchScreenKeyboard.Status.Done:
+                if (lastInput.Length > 2) {
+                    lastInput = lastInput.Substring(0, 2);
+                    currentKeyboard.text = lastInput;
+                }
                 CloseKeyboard();
                 onEditEnd.Invoke(lastInput);
                 break;
@@ -49,13 +54,13 @@ public class CustomInputField : MonoBehaviour {
         }
     }
 
-    public void OpenKeyboard() {
+    public void OpenKeyboard(string initialText = "") {
         if (isOpen)
             return;
         TouchScreenKeyboard.Android.closeKeyboardOnOutsideTap = false;
-        currentKeyboard = TouchScreenKeyboard.Open(null, TouchScreenKeyboardType.Default,
+        currentKeyboard = TouchScreenKeyboard.Open(initialText, TouchScreenKeyboardType.Default,
                                                     false, false, false, false,
-                                                    placeHolderText, 2);
+                                                    placeHolderText, 4);
     }
 
     public void CloseKeyboard() {
