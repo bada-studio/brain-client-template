@@ -29,8 +29,6 @@ public class PuzzlePanel : BasePanel
     private int cursorBallIndex;
     private string cursorNumber;
 
-    private bool isMovedCursor;
-
     private bool isUsedHint;
 
     private void Awake()
@@ -74,7 +72,6 @@ public class PuzzlePanel : BasePanel
 
         description.text = "꿈에서 본 숫자를 입력하세요.";
 
-        isMovedCursor = false;
         isUsedHint = false;
         cursorBallIndex = 0;
         cursorNumber = "";
@@ -112,21 +109,14 @@ public class PuzzlePanel : BasePanel
             }
         }
 
+        cursorNumber = "";
         numberList[cursorBallIndex].SetNumber(LottoBall.Type.Cursor, -1, true, OnClickLottoBall);
-
-        isMovedCursor = true;
     }
 
     public void OnClickKeypadNumber(string number)
     {
         if (gameController.AnswerCount <= cursorBallIndex)
             return;
-
-        if (isMovedCursor)
-        {
-            isMovedCursor = false;
-            cursorNumber = "";
-        }
 
         cursorNumber += number;
         numberList[cursorBallIndex].SetNumber(LottoBall.Type.Cursor, cursorNumber, true, OnClickLottoBall);
@@ -140,10 +130,7 @@ public class PuzzlePanel : BasePanel
                 ++cursorBallIndex;
                 cursorNumber = "";
                 if (cursorBallIndex < gameController.AnswerCount)
-                {
                     numberList[cursorBallIndex].SetNumber(LottoBall.Type.Cursor, -1, true, OnClickLottoBall);
-                    cursorNumber = numberList[cursorBallIndex].GetNumberString();
-                }
             }
             else
             {
@@ -251,6 +238,11 @@ public class PuzzlePanel : BasePanel
             puzzleAnimator.Play("PuzzleConfirm");
 
             gameController.StopAccumulatePlayTime();
+
+            for (int i = 0; i < gameController.AnswerCount; ++i)
+            {
+                numberList[i].SetNumber(LottoBall.Type.Normal);
+            }
 
             for (int i = gameController.AnswerCount; i < 6; ++i)
             {
