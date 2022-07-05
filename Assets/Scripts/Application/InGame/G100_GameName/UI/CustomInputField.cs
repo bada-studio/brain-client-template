@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class CustomInputField : MonoBehaviour {
+    [SerializeField] private string placeHolderText;
+
     public string text {
         get {
             return currentKeyboard != null ? currentKeyboard.text : null;
@@ -14,8 +16,9 @@ public class CustomInputField : MonoBehaviour {
             onValueChanged?.Invoke(lastInput);
         }
     }
-    public bool isOpen { get; private set; }
+    public bool isOpen => currentKeyboard != null;
     public UnityEvent<string> onValueChanged { get; private set; }
+    public UnityEvent<string> onEditEnd { get; private set; }
 
     private TouchScreenKeyboard currentKeyboard;
     private string lastInput = null;
@@ -23,15 +26,27 @@ public class CustomInputField : MonoBehaviour {
 
     private void Awake() {
         onValueChanged = new UnityEvent<string>();
+        onEditEnd = new UnityEvent<string>();
     }
 
     private void Update() {
         if (!isOpen || !canInput)
             return;
-        if (currentKeyboard.text == lastInput)
-            return;
-        lastInput = currentKeyboard.text;
-        onValueChanged.Invoke(lastInput);
+
+        if (currentKeyboard.text != lastInput) {
+            lastInput = currentKeyboard.text;
+            onValueChanged.Invoke(lastInput);
+        }
+
+        switch (currentKeyboard.status) {
+            case TouchScreenKeyboard.Status.Done:
+                CloseKeyboard();
+                onEditEnd.Invoke(lastInput);
+                break;
+            case TouchScreenKeyboard.Status.Canceled:
+                CloseKeyboard();
+                break;
+        }
     }
 
     public void OpenKeyboard() {
@@ -39,22 +54,20 @@ public class CustomInputField : MonoBehaviour {
             return;
         TouchScreenKeyboard.Android.closeKeyboardOnOutsideTap = false;
         currentKeyboard = TouchScreenKeyboard.Open(null, TouchScreenKeyboardType.Default,
-                                                    false, false, false, false, null, 2);
-        isOpen = true;
+                                                    false, false, false, false,
+                                                    placeHolderText, 2);
     }
 
     public void CloseKeyboard() {
-        if (!isOpen)
-            return;
+        if (isOpen)
+            currentKeyboard.active = false;
         TouchScreenKeyboard.Android.closeKeyboardOnOutsideTap = true;
-        currentKeyboard.active = false;
-        isOpen = false;
+        currentKeyboard = null;
     }
 
     public void SetInputEnable(bool canInput) {
         if (!isOpen)
             return;
-
         if (canInput) {
             this.canInput = true;
             currentKeyboard.text = string.Empty;

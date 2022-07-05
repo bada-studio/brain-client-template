@@ -22,9 +22,7 @@ namespace BCPG9 {
     public class BCPG9_FourWord : MonoBehaviour, ServiceStatePresenter {
         #region Event Binder
         public static void CallGlobalEvent(BCPG9GameEventType eType) => globalEventCall?.Invoke(eType);
-        public static void CallInputEvent(string input) => inputEventCall?.Invoke(input);
         private static UnityEvent<BCPG9GameEventType> globalEventCall;
-        private static UnityEvent<string> inputEventCall;
         #endregion
 
         #region Serialize Field
@@ -102,7 +100,6 @@ namespace BCPG9 {
         private void Initialize() {
             Debug.Log("Initialize Start");
             globalEventCall ??= new UnityEvent<BCPG9GameEventType>();
-            inputEventCall ??= new UnityEvent<string>();
 
             rules = BCPG9_RuleService.instance.bcpg9Rule;
             indexProvider = new RandomIndexProvider(rules.Keys.ToList());
@@ -113,13 +110,13 @@ namespace BCPG9 {
             modules.Add(timer);
             modules.Add(uiController);
             modules.ForEach(_ => _.Initialize(gameData, this));
+            uiController.AddListener(OnInput, OnAnswer);
             uiController.gameObject.SetActive(false);
             state.SetTrigger("InitEnd");
         }
 
         private void OnReset() {
             globalEventCall.AddListener(CallGameEvent);
-            inputEventCall.AddListener(OnInputAnswer);
 
             Debug.Log("Reset State");
             uiController.gameObject.SetActive(true);
@@ -143,6 +140,7 @@ namespace BCPG9 {
         private void OnIdle() {
             Debug.Log("Idle State");
             CallGlobalEvent(BCPG9GameEventType.ResetInput);
+            uiController.SetKeyboard(true);
             ResumeGame();
         }
 
@@ -174,23 +172,18 @@ namespace BCPG9 {
             CallGlobalEvent(BCPG9GameEventType.End);
 
             globalEventCall.RemoveAllListeners();
-            inputEventCall.RemoveAllListeners();
         }
         #endregion
 
         #region Event Handler
-        // Handle Input Event
-        private void OnInputAnswer(string input) {
+        private void OnInput(string input) {
             currentInput = input;
             CallGlobalEvent(BCPG9GameEventType.Input);
-            if (currentInput.Length >= 2) {
-                var isCorrect = scoreManager.CheckAnswer(currentInput);
-                if (!KoreanUtil.CheckKoreanInputEnd(input) && !isCorrect) {
-                    Debug.Log($"Korean End:{KoreanUtil.CheckKoreanInputEnd(input)}");
-                    return;
-                }
-                state.SetTrigger(isCorrect ? "Correct" : "Incorrect");
-            }
+        }
+
+        private void OnAnswer(string answer) {
+            var isCorrect = scoreManager.CheckAnswer(answer);
+            state.SetTrigger(isCorrect ? "Correct" : "Incorrect");
         }
 
         // Handle Global Sending Event

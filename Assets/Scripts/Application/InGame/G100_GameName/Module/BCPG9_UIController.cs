@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Events;
 
 namespace BCPG9 {
     /*
@@ -16,13 +16,23 @@ namespace BCPG9 {
 
         private List<IUIEventCallback> eventCallbacks;
         private List<IUIUpdateCallback> updateCallbacks;
+        private UnityEvent<string> inputEvent;
+        private UnityEvent<string> editEndEvent;
 
         public void Initialize(BCPG9GameSettings gameData, BCPG9_FourWord gameManager) {
             eventCallbacks = GetComponentsInChildren<IUIEventCallback>().ToList();
             updateCallbacks = GetComponentsInChildren<IUIUpdateCallback>().ToList();
-            answerInputField.onValueChanged.AddListener(OnInputValueChange);
+            inputEvent = new UnityEvent<string>();
+            editEndEvent = new UnityEvent<string>();
+            answerInputField.onValueChanged.AddListener(inputEvent.Invoke);
+            answerInputField.onEditEnd.AddListener(editEndEvent.Invoke);
 
             Debug.Log($"Event Callbacks:{eventCallbacks.Count}  Update Callbacks:{updateCallbacks.Count}");
+        }
+
+        public void AddListener(UnityAction<string> inputAction, UnityAction<string> editEndAction) {
+            inputEvent.AddListener(inputAction);
+            editEndEvent.AddListener(editEndAction);
         }
 
         public void ResetModule() {
@@ -51,10 +61,6 @@ namespace BCPG9 {
                 answerInputField.OpenKeyboard();
             else
                 answerInputField.CloseKeyboard();
-        }
-
-        private void OnInputValueChange(string input) {
-            BCPG9_FourWord.CallInputEvent(input);
         }
     }
 }
