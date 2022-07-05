@@ -153,6 +153,7 @@ namespace BCPG9 {
 
         private void OnIncorrect() {
             Debug.Log("Incorrect State");
+            scoreManager.ClearCombo();
             PauseGame();
             CallGlobalEvent(BCPG9GameEventType.Incorrect);
             popupController.ShowResult(false, scoreManager.comboCount);
