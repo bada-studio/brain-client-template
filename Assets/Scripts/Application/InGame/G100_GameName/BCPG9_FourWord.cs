@@ -66,6 +66,14 @@ namespace BCPG9 {
                 }
             }
         }
+
+        private void OnApplicationPause(bool pauseStatus) {
+            if (pauseStatus)
+                PauseGame();
+            else
+                ResumeGame();
+            uiController.SetActiveKeyboard(!pauseStatus);
+        }
         #endregion
 
         #region Public Method
@@ -126,7 +134,7 @@ namespace BCPG9 {
             CallGlobalEvent(BCPG9GameEventType.Reset);
             isPaused = false;
             isCloseEnd = false;
-            uiController.SetKeyboard(true);
+            uiController.SetActiveKeyboard(true);
             uiController.LockInteraction(false);
         }
 
@@ -140,7 +148,7 @@ namespace BCPG9 {
         private void OnIdle() {
             Debug.Log("Idle State");
             CallGlobalEvent(BCPG9GameEventType.ResetInput);
-            uiController.SetKeyboard(true);
+            uiController.SetActiveKeyboard(true);
             ResumeGame();
         }
 
@@ -167,7 +175,7 @@ namespace BCPG9 {
 
         private void OnEnd() {
             Debug.Log("End State");
-            uiController.SetKeyboard(false);
+            uiController.SetActiveKeyboard(false);
             PauseGame();
             popupController.ShowBottomPanel();
             CallGlobalEvent(BCPG9GameEventType.End);

@@ -16,13 +16,15 @@ public class CustomInputField : MonoBehaviour {
             onValueChanged?.Invoke(lastInput);
         }
     }
-    public bool isOpen => currentKeyboard != null;
+
     public UnityEvent<string> onValueChanged { get; private set; }
     public UnityEvent<string> onEditEnd { get; private set; }
 
+    public bool isOpen => currentKeyboard != null;
+
     private TouchScreenKeyboard currentKeyboard;
     private string lastInput = null;
-    private bool canInput = true;
+    private bool canInput = false;
 
     private void Awake() {
         onValueChanged = new UnityEvent<string>();
@@ -30,9 +32,11 @@ public class CustomInputField : MonoBehaviour {
     }
 
     private void Update() {
-        if (!isOpen || !canInput)
+        if (!isOpen)
             return;
 
+        if (!canInput)
+            return;
 
         if (currentKeyboard.text != lastInput) {
             lastInput = currentKeyboard.text;
@@ -58,9 +62,12 @@ public class CustomInputField : MonoBehaviour {
         if (isOpen)
             return;
         TouchScreenKeyboard.Android.closeKeyboardOnOutsideTap = false;
+        lastInput = initialText;
         currentKeyboard = TouchScreenKeyboard.Open(initialText, TouchScreenKeyboardType.Default,
                                                     false, false, false, false,
                                                     placeHolderText, 4);
+        onValueChanged.Invoke(initialText);
+        canInput = true;
     }
 
     public void CloseKeyboard() {
@@ -68,18 +75,24 @@ public class CustomInputField : MonoBehaviour {
             currentKeyboard.active = false;
         TouchScreenKeyboard.Android.closeKeyboardOnOutsideTap = true;
         currentKeyboard = null;
+        canInput = false;
     }
 
     public void SetInputEnable(bool canInput) {
+        if (!isOpen) {
+            this.canInput = false;
+            return;
+        }
+        if (canInput)
+            ClearKeyboardText();
+        this.canInput = canInput;
+    }
+
+    private void ClearKeyboardText() {
         if (!isOpen)
             return;
-        if (canInput) {
-            this.canInput = true;
-            currentKeyboard.text = string.Empty;
-            lastInput = string.Empty;
-            onValueChanged.Invoke(lastInput);
-        } else {
-            this.canInput = false;
-        }
+        currentKeyboard.text = string.Empty;
+        lastInput = string.Empty;
+        onValueChanged.Invoke(lastInput);
     }
 }

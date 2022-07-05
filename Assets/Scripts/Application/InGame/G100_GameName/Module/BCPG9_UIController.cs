@@ -56,7 +56,7 @@ namespace BCPG9 {
             }
         }
 
-        public void SetKeyboard(bool isActive) {
+        public void SetActiveKeyboard(bool isActive) {
             if (isActive)
                 answerInputField.OpenKeyboard();
             else
