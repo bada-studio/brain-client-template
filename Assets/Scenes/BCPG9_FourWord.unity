@@ -1058,14 +1058,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5614376206134093934, guid: b543bbfa5638d8d48beaa9b9db8cfdca, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5614376206134093934, guid: b543bbfa5638d8d48beaa9b9db8cfdca, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 6550955493482762546, guid: b543bbfa5638d8d48beaa9b9db8cfdca, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1363,6 +1355,10 @@ PrefabInstance:
       propertyPath: popupController
       value: 
       objectReference: {fileID: 2036616189}
+    - target: {fileID: 3594947173265043932, guid: e41c61f944b3512429e418393b42ad62, type: 3}
+      propertyPath: gameData.limitedTime
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 3594947173265043933, guid: e41c61f944b3512429e418393b42ad62, type: 3}
       propertyPath: canvas
       value: 

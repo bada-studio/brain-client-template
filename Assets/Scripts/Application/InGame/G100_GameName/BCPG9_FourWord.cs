@@ -22,9 +22,9 @@ namespace BCPG9 {
     public class BCPG9_FourWord : MonoBehaviour, ServiceStatePresenter {
         #region Event Binder
         public static void CallGlobalEvent(BCPG9GameEventType eType) => globalEventCall?.Invoke(eType);
-        public static void CallInputEvent(InputField field) => inputEventCall?.Invoke(field);
+        public static void CallInputEvent(string input) => inputEventCall?.Invoke(input);
         private static UnityEvent<BCPG9GameEventType> globalEventCall;
-        private static UnityEvent<InputField> inputEventCall;
+        private static UnityEvent<string> inputEventCall;
         #endregion
 
         #region Serialize Field
@@ -102,7 +102,7 @@ namespace BCPG9 {
         private void Initialize() {
             Debug.Log("Initialize Start");
             globalEventCall ??= new UnityEvent<BCPG9GameEventType>();
-            inputEventCall ??= new UnityEvent<InputField>();
+            inputEventCall ??= new UnityEvent<string>();
 
             rules = BCPG9_RuleService.instance.bcpg9Rule;
             indexProvider = new RandomIndexProvider(rules.Keys.ToList());
@@ -129,6 +129,7 @@ namespace BCPG9 {
             CallGlobalEvent(BCPG9GameEventType.Reset);
             isPaused = false;
             isCloseEnd = false;
+            uiController.SetKeyboard(true);
             uiController.LockInteraction(false);
         }
 
@@ -179,13 +180,13 @@ namespace BCPG9 {
 
         #region Event Handler
         // Handle Input Event
-        private void OnInputAnswer(InputField field) {
-            currentInput = field.text;
+        private void OnInputAnswer(string input) {
+            currentInput = input;
             CallGlobalEvent(BCPG9GameEventType.Input);
             if (currentInput.Length >= 2) {
                 var isCorrect = scoreManager.CheckAnswer(currentInput);
-                if (!field.CheckKoreanInputEnd() && !isCorrect) {
-                    Debug.Log(field.CheckKoreanInputEnd());
+                if (!KoreanUtil.CheckKoreanInputEnd(input) && !isCorrect) {
+                    Debug.Log($"Korean End:{KoreanUtil.CheckKoreanInputEnd(input)}");
                     return;
                 }
                 state.SetTrigger(isCorrect ? "Correct" : "Incorrect");
@@ -197,7 +198,6 @@ namespace BCPG9 {
             switch (eventType) {
                 case BCPG9GameEventType.HintOpen:
                     scoreManager.ClearCombo();
-                    uiController.SetKeyboard(true);
                     break;
                 case BCPG9GameEventType.Pass:
                     state.SetTrigger("Pass");

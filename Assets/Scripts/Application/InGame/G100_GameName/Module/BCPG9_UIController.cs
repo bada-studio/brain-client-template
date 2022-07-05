@@ -11,17 +11,15 @@ namespace BCPG9 {
         Virtual Keyboard Control
     */
     public class BCPG9_UIController : MonoBehaviour, IGameModule {
-        [SerializeField] InputField answerInputField;
+        [SerializeField] CustomInputField answerInputField;
         [SerializeField] GameObject screenLock;
 
         private List<IUIEventCallback> eventCallbacks;
         private List<IUIUpdateCallback> updateCallbacks;
-        private List<InputField> inputFields;
 
         public void Initialize(BCPG9GameSettings gameData, BCPG9_FourWord gameManager) {
             eventCallbacks = GetComponentsInChildren<IUIEventCallback>().ToList();
             updateCallbacks = GetComponentsInChildren<IUIUpdateCallback>().ToList();
-            inputFields = GetComponentsInChildren<InputField>().ToList();
             answerInputField.onValueChanged.AddListener(OnInputValueChange);
 
             Debug.Log($"Event Callbacks:{eventCallbacks.Count}  Update Callbacks:{updateCallbacks.Count}");
@@ -41,23 +39,22 @@ namespace BCPG9 {
         public void LockInteraction(bool isLock) {
             screenLock.SetActive(isLock);
             if (isLock) {
-                answerInputField.interactable = false;
+                answerInputField.SetInputEnable(false);
             } else {
-                answerInputField.interactable = true;
-                answerInputField.ActivateInputField();
+                answerInputField.SetInputEnable(true);
                 answerInputField.text = "";
             }
         }
 
         public void SetKeyboard(bool isActive) {
             if (isActive)
-                answerInputField.ActivateInputField();
+                answerInputField.OpenKeyboard();
             else
-                answerInputField.DeactivateInputField();
+                answerInputField.CloseKeyboard();
         }
 
         private void OnInputValueChange(string input) {
-            BCPG9_FourWord.CallInputEvent(answerInputField);
+            BCPG9_FourWord.CallInputEvent(input);
         }
     }
 }

@@ -5,10 +5,10 @@ namespace BCPG9 {
         Input Field Custom Extension
         Check Korean string last character is complete word.
     */
-    public static class InputFieldExtensions {
+    public static class KoreanUtil {
 #warning Todo: iOS Korean Encoding Support
-        public static bool CheckKoreanInputEnd(this InputField field) {
-            return CheckKoreanInputUnicode(field.text);
+        public static bool CheckKoreanInputEnd(string text) {
+            return CheckKoreanInputUnicode(text);
         }
 
         private static bool CheckKoreanInputUnicode(string text) {
