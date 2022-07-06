@@ -19,6 +19,8 @@ namespace BCPG9 {
 
         public int comboCount { get; private set; }
         public int currentScore { get; private set; }
+        public int correctCount { get; private set; }
+        public int incorrectCount { get; private set; }
         public Dictionary<string, string> currentAnswer { get; private set; }
         public float remainComboTime => comboCheckTime - (timer.time - lastCheckTime);
 
@@ -34,6 +36,8 @@ namespace BCPG9 {
             lastCheckTime = timer.time;
             comboCount = 0;
             currentScore = 0;
+            correctCount = 0;
+            incorrectCount = 0;
         }
 
         public void SetAnswer(BCPG9Rule rule) {
@@ -43,13 +47,17 @@ namespace BCPG9 {
         public bool CheckAnswer(string input) {
             bool isCorrect = currentAnswer.ContainsKey(input);
             if (isCorrect) {
+                correctCount++;
                 CheckCombo();
                 AddScore();
+            } else {
+                incorrectCount++;
             }
             return isCorrect;
         }
 
         public void OnPassAnswer() {
+            incorrectCount++;
             currentScore = Mathf.FloorToInt(currentScore * passMultiplier);
         }
 

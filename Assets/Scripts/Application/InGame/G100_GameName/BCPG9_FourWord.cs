@@ -93,6 +93,13 @@ namespace BCPG9 {
             CallGlobalEvent(BCPG9GameEventType.Resume);
             uiController.LockInteraction(false);
         }
+
+#warning Get Game Result Interface
+        public (int score, int correct, int incorrect) GetGameResult() {
+            return (scoreManager.currentScore,
+                    scoreManager.correctCount,
+                    scoreManager.incorrectCount);
+        }
         #endregion
 
         /*

@@ -61,7 +61,7 @@ public class CustomInputField : MonoBehaviour {
     public void OpenKeyboard(string initialText = "") {
         if (isOpen)
             return;
-        TouchScreenKeyboard.Android.closeKeyboardOnOutsideTap = false;
+        SetKeyboardAutoClose(false);
         lastInput = initialText;
         currentKeyboard = TouchScreenKeyboard.Open(initialText, TouchScreenKeyboardType.Default,
                                                     false, false, false, false,
@@ -73,7 +73,7 @@ public class CustomInputField : MonoBehaviour {
     public void CloseKeyboard() {
         if (isOpen)
             currentKeyboard.active = false;
-        TouchScreenKeyboard.Android.closeKeyboardOnOutsideTap = true;
+        SetKeyboardAutoClose(true);
         currentKeyboard = null;
         canInput = false;
     }
@@ -94,5 +94,12 @@ public class CustomInputField : MonoBehaviour {
         currentKeyboard.text = string.Empty;
         lastInput = string.Empty;
         onValueChanged.Invoke(lastInput);
+    }
+
+#warning Need Keyboard iOS Settings
+    private void SetKeyboardAutoClose(bool isAuto) {
+#if UNITY_ANDROID
+        TouchScreenKeyboard.Android.closeKeyboardOnOutsideTap = isAuto;
+#endif
     }
 }
